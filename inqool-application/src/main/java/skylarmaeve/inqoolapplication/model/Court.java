@@ -5,7 +5,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 @Entity
 @Table(name = "courts")
 public class Court extends BaseEntity
@@ -17,19 +21,4 @@ public class Court extends BaseEntity
     @JoinColumn(name = "surface_type_id")
     private SurfaceType surfaceType;
 
-    public String getCourtName() {
-        return courtName;
-    }
-
-    public void setCourtName(String courtName) {
-        this.courtName = courtName;
-    }
-
-    public SurfaceType getSurfaceType() {
-        return surfaceType;
-    }
-
-    public void setSurfaceType(SurfaceType surfaceType) {
-        this.surfaceType = surfaceType;
-    }
 }
