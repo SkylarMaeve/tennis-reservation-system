@@ -15,7 +15,7 @@ import lombok.Setter;
 public class Court extends BaseEntity
 {
     @Column(nullable = false,  unique = true)
-    private String courtName;
+    private Integer courtNumber;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "surface_type_id")
