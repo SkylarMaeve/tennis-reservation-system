@@ -1,4 +1,4 @@
-package skylarmaeve.inqoolapplication.dao;
+package skylarmaeve.tennisreservationsystem.dao;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager;
 import org.springframework.context.annotation.Import;
-import skylarmaeve.inqoolapplication.model.Court;
-import skylarmaeve.inqoolapplication.model.Customer;
-import skylarmaeve.inqoolapplication.model.Reservation;
-import skylarmaeve.inqoolapplication.model.SurfaceType;
+import skylarmaeve.tennisreservationsystem.model.Court;
+import skylarmaeve.tennisreservationsystem.model.Customer;
+import skylarmaeve.tennisreservationsystem.model.Reservation;
+import skylarmaeve.tennisreservationsystem.model.SurfaceType;
 
 import java.time.LocalDateTime;
 import java.util.List;

@@ -1,11 +1,9 @@
-package skylarmaeve.inqoolapplication.dao;
+package skylarmaeve.tennisreservationsystem.dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
-import skylarmaeve.inqoolapplication.model.Court;
-import skylarmaeve.inqoolapplication.model.Reservation;
-import tools.jackson.databind.ser.jackson.RawSerializer;
+import skylarmaeve.tennisreservationsystem.model.Reservation;
 
 import java.time.LocalDateTime;
 import java.util.List;

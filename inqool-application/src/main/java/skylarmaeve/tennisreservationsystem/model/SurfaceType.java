@@ -1,4 +1,4 @@
-package skylarmaeve.inqoolapplication.model;
+package skylarmaeve.tennisreservationsystem.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
