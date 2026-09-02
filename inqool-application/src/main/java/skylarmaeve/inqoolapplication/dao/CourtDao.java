@@ -34,9 +34,9 @@ public class CourtDao {
 
     public List<Court> findAll() {
         StringBuilder textQuery = new StringBuilder(
-                "SELECT court " +
-                "FROM Courts " +
-                "WHERE court.deleted = false"
+                "SELECT c " +
+                "FROM Court c  " +
+                "WHERE c.deleted = false"
         );
 
         return em.createQuery(textQuery.toString(), Court.class).getResultList();

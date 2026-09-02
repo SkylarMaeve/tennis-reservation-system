@@ -3,6 +3,7 @@ package skylarmaeve.inqoolapplication.dao;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
+import skylarmaeve.inqoolapplication.model.Court;
 import skylarmaeve.inqoolapplication.model.Reservation;
 import tools.jackson.databind.ser.jackson.RawSerializer;
 
@@ -37,29 +38,29 @@ public class ReservationDao {
     public List<Reservation> findByCourtNumber(Integer courtNumber) {
         StringBuilder textQuery = new StringBuilder(
                 "SELECT reservation " +
-                "FROM Reservations reservation " +
-                "WHERE reservation.court.courtNumber = :courtNumber AND reservation.deleted = false"+
-                "ORDER BY resrvation.createdAt ASC"
+                "FROM Reservation reservation " +
+                "WHERE reservation.court.courtNumber = :courtNumber AND reservation.deleted = false "+
+                "ORDER BY reservation.createdAt ASC"
         );
         var query = em.createQuery(textQuery.toString(),  Reservation.class)
                 .setParameter("courtNumber", courtNumber);
         return query.getResultList();
     }
 
-    public boolean isFreeTimeSlot(Long courtId, LocalDateTime startTime, LocalDateTime endTime)
+    public boolean isFreeTimeSlot(Integer courtNumber, LocalDateTime startTime, LocalDateTime endTime)
     {
         StringBuilder textQuery = new StringBuilder(
                 "SELECT reservation " +
-                "FROM Reservations reservation " +
-                "WHERE resrvation.courtId == :courtId " +
+                "FROM Reservation reservation " +
+                "WHERE reservation.court.courtNumber = :courtNumber " +
                         "AND reservation.startTime < :endTime " +
-                        "AND reservation.endTime > :startTime"+
+                        "AND reservation.endTime > :startTime "+
                         "AND reservation.deleted = false"
 
         );
 
         var query = em.createQuery(textQuery.toString(),  Reservation.class)
-                .setParameter("courtId", courtId)
+                .setParameter("courtNumber", courtNumber)
                 .setParameter("startTime", startTime)
                 .setParameter("endTime", endTime);
 
@@ -69,7 +70,7 @@ public class ReservationDao {
     public List<Reservation> findByPhoneNumber(String phoneNumber, boolean onlyFuture) {
         StringBuilder textQuery = new StringBuilder(
                 "SELECT reservation " +
-                "FROM Reservations reservation " +
+                "FROM Reservation reservation " +
                 "WHERE reservation.customer.phoneNumber = :phoneNumber AND reservation.deleted = false"
         );
         if (onlyFuture) {
@@ -82,6 +83,16 @@ public class ReservationDao {
             query.setParameter("now", LocalDateTime.now());
         }
         return query.getResultList();
+    }
+
+    public List<Reservation> findAll() {
+        StringBuilder textQuery = new StringBuilder(
+                "SELECT r " +
+                "FROM Reservation r  " +
+                "WHERE r.deleted = false"
+        );
+
+        return em.createQuery(textQuery.toString(), Reservation.class).getResultList();
     }
 
 
