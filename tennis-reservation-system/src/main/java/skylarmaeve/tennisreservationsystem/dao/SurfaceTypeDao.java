@@ -1,10 +1,9 @@
-package skylarmaeve.inqoolapplication.dao;
+package skylarmaeve.tennisreservationsystem.dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
-import skylarmaeve.inqoolapplication.model.Reservation;
-import skylarmaeve.inqoolapplication.model.SurfaceType;
+import skylarmaeve.tennisreservationsystem.model.SurfaceType;
 
 import java.util.Optional;
 
