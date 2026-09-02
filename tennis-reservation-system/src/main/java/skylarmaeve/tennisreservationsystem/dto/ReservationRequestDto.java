@@ -1,12 +1,7 @@
 package skylarmaeve.tennisreservationsystem.dto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
-import skylarmaeve.tennisreservationsystem.model.Court;
-import skylarmaeve.tennisreservationsystem.model.Customer;
 
 import java.time.LocalDateTime;
 

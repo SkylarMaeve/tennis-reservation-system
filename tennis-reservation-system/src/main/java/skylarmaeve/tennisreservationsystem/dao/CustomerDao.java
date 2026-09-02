@@ -3,7 +3,6 @@ package skylarmaeve.tennisreservationsystem.dao;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
-import skylarmaeve.tennisreservationsystem.model.Court;
 import skylarmaeve.tennisreservationsystem.model.Customer;
 
 import java.util.Optional;
