@@ -3,8 +3,10 @@ package skylarmaeve.tennisreservationsystem.dao;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
+import skylarmaeve.tennisreservationsystem.model.Reservation;
 import skylarmaeve.tennisreservationsystem.model.SurfaceType;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -23,6 +25,16 @@ public class SurfaceTypeDao {
     public Optional<SurfaceType> findById(long id) {
         SurfaceType surfaceType = em.find(SurfaceType.class, id);
         return (surfaceType != null && !surfaceType.isDeleted()) ? Optional.of(surfaceType): Optional.empty();
+    }
+
+    public List<SurfaceType> findAll() {
+        StringBuilder textQuery = new StringBuilder(
+                "SELECT s " +
+                "FROM SurfaceType s  " +
+                "WHERE s.deleted = false"
+        );
+
+        return em.createQuery(textQuery.toString(), SurfaceType.class).getResultList();
     }
 
     public void delete(SurfaceType surfaceType) {

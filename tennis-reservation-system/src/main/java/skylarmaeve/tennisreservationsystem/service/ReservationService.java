@@ -6,7 +6,8 @@ import skylarmaeve.tennisreservationsystem.dao.CourtDao;
 import skylarmaeve.tennisreservationsystem.dao.CustomerDao;
 import skylarmaeve.tennisreservationsystem.dao.ReservationDao;
 import skylarmaeve.tennisreservationsystem.dto.CourtDto;
-import skylarmaeve.tennisreservationsystem.dto.ReservationRequest;
+import skylarmaeve.tennisreservationsystem.dto.ReservationRequestDto;
+import skylarmaeve.tennisreservationsystem.dto.ReservationRequestDto;
 import skylarmaeve.tennisreservationsystem.dto.ReservationResponseDto;
 import skylarmaeve.tennisreservationsystem.exception.CourtException;
 import skylarmaeve.tennisreservationsystem.exception.ReservationException;
@@ -32,7 +33,7 @@ public class ReservationService {
     }
 
 
-    public ReservationResponseDto createReservation(ReservationRequest dto) {
+    public ReservationResponseDto createReservation(ReservationRequestDto dto) {
         if (dto.getStartTime().isAfter(dto.getEndTime()) || dto.getStartTime().isEqual(dto.getEndTime())) {
             throw new ReservationException("End time must be after start time");
         }
@@ -100,7 +101,7 @@ public class ReservationService {
                 .toList();
     }
 
-    public ReservationResponseDto updateReservation(Long id, ReservationRequest dto) {
+    public ReservationResponseDto updateReservation(Long id, ReservationRequestDto dto) {
         Reservation reservation = reservationDao.findById(id)
                 .orElseThrow(() -> new ReservationException("Reservation not found."));
 

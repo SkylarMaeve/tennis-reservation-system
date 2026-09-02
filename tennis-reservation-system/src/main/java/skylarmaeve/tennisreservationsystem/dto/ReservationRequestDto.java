@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class ReservationRequest {
+public class ReservationRequestDto {
 
     private Long Id;
     private Integer courtNumber;
