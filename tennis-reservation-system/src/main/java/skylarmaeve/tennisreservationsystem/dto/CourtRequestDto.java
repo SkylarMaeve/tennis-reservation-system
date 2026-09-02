@@ -1,0 +1,23 @@
+package skylarmaeve.tennisreservationsystem.dto;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import lombok.Getter;
+import lombok.Setter;
+import skylarmaeve.tennisreservationsystem.model.Court;
+import skylarmaeve.tennisreservationsystem.model.SurfaceType;
+
+@Getter
+@Setter
+public class CourtRequestDto {
+    private Integer courtNumber;
+    private Long surfaceTypeId;
+    private String surfaceTypeName;
+
+    public CourtRequestDto(Court court) {
+        this.courtNumber = court.getCourtNumber();
+        this.surfaceTypeId = court.getSurfaceType().getId();
+        this.surfaceTypeName = court.getSurfaceType().getName();
+    }
+}
