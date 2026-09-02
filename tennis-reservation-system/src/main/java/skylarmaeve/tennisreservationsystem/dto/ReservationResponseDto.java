@@ -9,6 +9,7 @@ import skylarmaeve.tennisreservationsystem.model.Court;
 import skylarmaeve.tennisreservationsystem.model.Customer;
 import skylarmaeve.tennisreservationsystem.model.Reservation;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 @Getter
 public class ReservationResponseDto {
@@ -21,7 +22,7 @@ public class ReservationResponseDto {
     private LocalDateTime endTime;
 
     private boolean isDoubles;
-    private float price;
+    private BigDecimal price;
 
     public ReservationResponseDto(Reservation reservation) {
         this.id = reservation.getId();

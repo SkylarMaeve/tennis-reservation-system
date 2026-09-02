@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Import;
 import skylarmaeve.tennisreservationsystem.model.Court;
 import skylarmaeve.tennisreservationsystem.model.SurfaceType;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,7 +31,7 @@ public class CourtDaoTests {
     void setUp() {
         grass = new SurfaceType();
         grass.setName("Grass");
-        grass.setPricePerMinute(0.50f);
+        grass.setPricePerMinute(BigDecimal.valueOf(0.5));
         entityManager.persist(grass);
         entityManager.flush();
     }

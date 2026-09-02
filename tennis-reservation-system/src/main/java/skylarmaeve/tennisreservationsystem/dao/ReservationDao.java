@@ -44,8 +44,12 @@ public class ReservationDao {
                 .setParameter("courtNumber", courtNumber);
         return query.getResultList();
     }
-
     public boolean isFreeTimeSlot(Integer courtNumber, LocalDateTime startTime, LocalDateTime endTime)
+    {
+        return isFreeTimeSlot(courtNumber, startTime, endTime, null);
+    }
+
+    public boolean isFreeTimeSlot(Integer courtNumber, LocalDateTime startTime, LocalDateTime endTime, Long oldReservationId)
     {
         StringBuilder textQuery = new StringBuilder(
                 "SELECT reservation " +
@@ -56,14 +60,25 @@ public class ReservationDao {
                         "AND reservation.deleted = false"
 
         );
+        if (oldReservationId != null)
+        {
+            textQuery.append(" AND reservation.id != :oldReservationId ");
+        }
 
         var query = em.createQuery(textQuery.toString(),  Reservation.class)
                 .setParameter("courtNumber", courtNumber)
                 .setParameter("startTime", startTime)
                 .setParameter("endTime", endTime);
 
+        if (oldReservationId != null)
+        {
+            query.setParameter("oldReservationId", oldReservationId);
+        }
+
         return query.getResultList().isEmpty();
     }
+
+
 
     public List<Reservation> findByPhoneNumber(String phoneNumber, boolean onlyFuture) {
         StringBuilder textQuery = new StringBuilder(

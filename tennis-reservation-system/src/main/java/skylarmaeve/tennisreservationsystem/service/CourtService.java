@@ -29,7 +29,7 @@ public class CourtService {
         }
 
         SurfaceType surfaceType = surfaceTypeDao.findById(dto.getSurfaceTypeId())
-                .orElseThrow(() -> new IllegalArgumentException("Selected Surface Type does not exist."));
+                .orElseThrow(() -> new CourtException("Selected Surface Type does not exist."));
 
         Court court = new Court();
         court.setSurfaceType(surfaceType);
@@ -39,16 +39,23 @@ public class CourtService {
         return new CourtDto(saved);
     }
 
-    public List<CourtDto> findAll() {
+    public CourtDto get(Long id) {
+        Court court = courtDao.findById(id)
+                .orElseThrow(() -> new CourtException("Court not found"));
+
+        return new CourtDto(court);
+    }
+
+    public List<CourtDto> getALl() {
         return courtDao.findAll().stream().map(CourtDto::new).toList();
     }
 
-    public CourtDto update(CourtDto dto) {
-        Court  court = courtDao.findById(dto.getCourtNumber())
-                .orElseThrow(() -> new IllegalArgumentException("Selected Court does not exist."));
+    public CourtDto update(Long id, CourtDto dto) {
+        Court court = courtDao.findById(id)
+                .orElseThrow(() -> new CourtException("Selected Court does not exist."));
 
         SurfaceType surfaceType = surfaceTypeDao.findById(dto.getSurfaceTypeId())
-                .orElseThrow(() -> new IllegalArgumentException("Selected Surface Type does not exist."));
+                .orElseThrow(() -> new CourtException("Selected Surface Type does not exist."));
 
         court.setSurfaceType(surfaceType);
         court.setCourtNumber(dto.getCourtNumber());
@@ -59,7 +66,7 @@ public class CourtService {
 
     public void delete(Long id) {
         Court court = courtDao.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Selected Court does not exist."));
+                .orElseThrow(() -> new CourtException("Selected Court does not exist."));
         courtDao.delete(court);
     }
 }

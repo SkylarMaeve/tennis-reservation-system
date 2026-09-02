@@ -6,6 +6,8 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Setter
 @Getter
 @Entity
@@ -15,6 +17,6 @@ public class SurfaceType extends BaseEntity{
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
-    private float costPerMinute;
+    private BigDecimal pricePerMinute;
 
 }

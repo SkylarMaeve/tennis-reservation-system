@@ -11,6 +11,7 @@ import skylarmaeve.tennisreservationsystem.model.Customer;
 import skylarmaeve.tennisreservationsystem.model.Reservation;
 import skylarmaeve.tennisreservationsystem.model.SurfaceType;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class ReservationDaoTests {
     void setUp() {
         grass = new SurfaceType();
         grass.setName("Grass");
-        grass.setCostPerMinute(0.50f);
+        grass.setPricePerMinute(BigDecimal.valueOf(0.50));
         entityManager.persist(grass);
         entityManager.flush();
 
@@ -62,7 +63,7 @@ public class ReservationDaoTests {
         reservation.setDoubles(false);
         reservation.setStartTime(LocalDateTime.now());
         reservation.setEndTime(LocalDateTime.now());
-        reservation.setPrice(300f);
+        reservation.setPrice(BigDecimal.valueOf(300));
         return reservation;
     }
 
@@ -146,7 +147,7 @@ public class ReservationDaoTests {
         reservation.setDoubles(false);
         reservation.setStartTime(firstReservationStartTime);
         reservation.setEndTime(firstReservationEndTime);
-        reservation.setPrice(300f);
+        reservation.setPrice(BigDecimal.valueOf(300));
 
         reservationDao.save(reservation);
         entityManager.flush();
@@ -167,7 +168,7 @@ public class ReservationDaoTests {
         reservation.setDoubles(false);
         reservation.setStartTime(firstReservationStartTime);
         reservation.setEndTime(firstReservationEndTime);
-        reservation.setPrice(300f);
+        reservation.setPrice(BigDecimal.valueOf(300));
 
         reservationDao.save(reservation);
         entityManager.flush();
@@ -186,7 +187,7 @@ public class ReservationDaoTests {
         reservation.setDoubles(false);
         reservation.setStartTime(LocalDateTime.now());
         reservation.setEndTime(LocalDateTime.now().plusHours(1));
-        reservation.setPrice(300f);
+        reservation.setPrice(BigDecimal.valueOf(300));
 
         reservationDao.save(reservation);
         entityManager.flush();
