@@ -1,6 +1,5 @@
 package skylarmaeve.tennisreservationsystem.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,18 +29,27 @@ public class ReservationController {
 
     @PostMapping
     public ResponseEntity<PriceResponseDto> createReservation(@RequestBody ReservationRequestDto dto) {
-        var price = reservationService.createReservation(dto).getPrice();
+        var price = reservationService.create(dto).getPrice();
         return ResponseEntity.status(HttpStatus.CREATED).body(new PriceResponseDto(price));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ReservationResponseDto> getReservation(@PathVariable Long id) {
+        return ResponseEntity.ok(reservationService.get(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ReservationResponseDto>> getAllReservations() {
+        return ResponseEntity.ok(reservationService.getAll());
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ReservationResponseDto> updateReservation(
             @PathVariable Long id,
             @RequestBody ReservationRequestDto dto) {
-        var response = reservationService.updateReservation(id, dto);
+        var response = reservationService.update(id, dto);
         return ResponseEntity.ok(response);
     }
-
 
     @GetMapping("court/{courtNumber}")
     public ResponseEntity<List<ReservationResponseDto>> getReservation(@PathVariable Integer courtNumber) {
@@ -55,10 +63,6 @@ public class ReservationController {
         return ResponseEntity.ok(reservationService.getReservationsByPhoneNumber(phoneNumber, onlyFuture));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ReservationResponseDto> getReservation(@PathVariable Long id) {
-        return ResponseEntity.ok(reservationService.get(id));
-    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReservation(@PathVariable Long id) {

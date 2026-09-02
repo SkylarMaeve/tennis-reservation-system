@@ -3,10 +3,8 @@ package skylarmaeve.tennisreservationsystem.service;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import skylarmaeve.tennisreservationsystem.dao.SurfaceTypeDao;
-import skylarmaeve.tennisreservationsystem.dto.CourtDto;
 import skylarmaeve.tennisreservationsystem.dto.SurfaceTypeDto;
-import skylarmaeve.tennisreservationsystem.exception.CourtException;
-import skylarmaeve.tennisreservationsystem.model.Court;
+import skylarmaeve.tennisreservationsystem.exception.SurfaceException;
 import skylarmaeve.tennisreservationsystem.model.SurfaceType;
 
 import java.util.List;
@@ -20,7 +18,7 @@ public class SurfaceTypeService {
         this.surfaceTypeDao = surfaceTypeDao;
     }
 
-    public SurfaceTypeDto createSurfaceType(SurfaceTypeDto dto)
+    public SurfaceTypeDto create(SurfaceTypeDto dto)
     {
         SurfaceType surfaceType = new  SurfaceType();
         surfaceType.setName(dto.getSurfaceTypeName());
@@ -32,7 +30,7 @@ public class SurfaceTypeService {
     public SurfaceTypeDto get(Long id)
     {
         SurfaceType surfaceType = surfaceTypeDao.findById(id)
-                .orElseThrow(() -> new CourtException("Surface type not found"));
+                .orElseThrow(() -> new SurfaceException("Surface type not found"));
 
         return new SurfaceTypeDto(surfaceType);
     }
@@ -44,12 +42,18 @@ public class SurfaceTypeService {
     public SurfaceTypeDto update(Long id, SurfaceTypeDto dto )
     {
         SurfaceType surfaceType = surfaceTypeDao.findById(id)
-                .orElseThrow(() -> new CourtException("Surface type not found"));
+                .orElseThrow(() -> new SurfaceException("Surface type not found"));
 
         surfaceType.setName(dto.getSurfaceTypeName());
         surfaceType.setPricePerMinute(dto.getPricePerMinute());
 
         SurfaceType saved = surfaceTypeDao.save(surfaceType);
         return new SurfaceTypeDto(saved);
+    }
+
+    public void delete(Long id) {
+        SurfaceType surfaceType = surfaceTypeDao.findById(id)
+                .orElseThrow(() -> new SurfaceException("Selected Surface does not exist."));
+        surfaceTypeDao.delete(surfaceType);
     }
 }

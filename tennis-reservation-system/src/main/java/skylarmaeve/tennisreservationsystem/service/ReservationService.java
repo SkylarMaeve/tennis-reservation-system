@@ -5,11 +5,8 @@ import org.springframework.stereotype.Service;
 import skylarmaeve.tennisreservationsystem.dao.CourtDao;
 import skylarmaeve.tennisreservationsystem.dao.CustomerDao;
 import skylarmaeve.tennisreservationsystem.dao.ReservationDao;
-import skylarmaeve.tennisreservationsystem.dto.CourtDto;
-import skylarmaeve.tennisreservationsystem.dto.ReservationRequestDto;
 import skylarmaeve.tennisreservationsystem.dto.ReservationRequestDto;
 import skylarmaeve.tennisreservationsystem.dto.ReservationResponseDto;
-import skylarmaeve.tennisreservationsystem.exception.CourtException;
 import skylarmaeve.tennisreservationsystem.exception.ReservationException;
 import skylarmaeve.tennisreservationsystem.model.Court;
 import skylarmaeve.tennisreservationsystem.model.Customer;
@@ -33,7 +30,7 @@ public class ReservationService {
     }
 
 
-    public ReservationResponseDto createReservation(ReservationRequestDto dto) {
+    public ReservationResponseDto create(ReservationRequestDto dto) {
         if (dto.getStartTime().isAfter(dto.getEndTime()) || dto.getStartTime().isEqual(dto.getEndTime())) {
             throw new ReservationException("End time must be after start time");
         }
@@ -101,7 +98,7 @@ public class ReservationService {
                 .toList();
     }
 
-    public ReservationResponseDto updateReservation(Long id, ReservationRequestDto dto) {
+    public ReservationResponseDto update(Long id, ReservationRequestDto dto) {
         Reservation reservation = reservationDao.findById(id)
                 .orElseThrow(() -> new ReservationException("Reservation not found."));
 
