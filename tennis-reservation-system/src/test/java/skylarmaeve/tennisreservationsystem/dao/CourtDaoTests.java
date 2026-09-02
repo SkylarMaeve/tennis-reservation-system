@@ -30,7 +30,7 @@ public class CourtDaoTests {
     void setUp() {
         grass = new SurfaceType();
         grass.setName("Grass");
-        grass.setCostPerMinute(0.50f);
+        grass.setPricePerMinute(0.50f);
         entityManager.persist(grass);
         entityManager.flush();
     }

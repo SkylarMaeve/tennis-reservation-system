@@ -26,6 +26,18 @@ public class CourtDao {
         return (court != null && !court.isDeleted()) ? Optional.of(court): Optional.empty();
     }
 
+    public Optional<Court> findByCourtNumber(Integer courtNumber) {
+        StringBuilder textQuery = new StringBuilder(
+                "SELECT c " +
+                "FROM Court c  " +
+                "WHERE c.deleted = false AND c.courtNumber = :courtNumber"
+        );
+        var query = em.createQuery(textQuery.toString()).setParameter("courtNumber", courtNumber);
+        Court court = (Court) query.getSingleResultOrNull();
+        return (court != null && !court.isDeleted()) ? Optional.of(court): Optional.empty();
+    }
+
+
     public void delete(Court court) {
         court.setDeleted(true);
         em.merge(court);

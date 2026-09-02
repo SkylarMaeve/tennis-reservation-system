@@ -10,12 +10,12 @@ import skylarmaeve.tennisreservationsystem.model.SurfaceType;
 
 @Getter
 @Setter
-public class CourtRequestDto {
+public class CourtDto {
     private Integer courtNumber;
     private Long surfaceTypeId;
     private String surfaceTypeName;
 
-    public CourtRequestDto(Court court) {
+    public CourtDto(Court court) {
         this.courtNumber = court.getCourtNumber();
         this.surfaceTypeId = court.getSurfaceType().getId();
         this.surfaceTypeName = court.getSurfaceType().getName();
