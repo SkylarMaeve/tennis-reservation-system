@@ -3,11 +3,15 @@ package skylarmaeve.tennisreservationsystem.config;
 import jakarta.transaction.Transactional;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import skylarmaeve.tennisreservationsystem.dao.AppUserDao;
 import skylarmaeve.tennisreservationsystem.dao.CourtDao;
 import skylarmaeve.tennisreservationsystem.dao.SurfaceTypeDao;
 import skylarmaeve.tennisreservationsystem.model.Court;
 import skylarmaeve.tennisreservationsystem.model.SurfaceType;
+import skylarmaeve.tennisreservationsystem.model.user.AppUser;
+import skylarmaeve.tennisreservationsystem.model.user.Role;
 
 import java.math.BigDecimal;
 
@@ -17,15 +21,20 @@ public class DataInitializer implements CommandLineRunner {
 
     private final SurfaceTypeDao surfaceTypeDao;
     private final CourtDao courtDao;
+    private final AppUserDao appUserDao;
+    private final PasswordEncoder passwordEncoder;
 
-    public DataInitializer(SurfaceTypeDao surfaceTypeDao, CourtDao courtDao) {
+    public DataInitializer(SurfaceTypeDao surfaceTypeDao, CourtDao courtDao,  AppUserDao appUserDao,  PasswordEncoder passwordEncoder) {
         this.surfaceTypeDao = surfaceTypeDao;
         this.courtDao = courtDao;
+        this.appUserDao = appUserDao;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     @Transactional
     public void run(String... args) {
+        //Seeding as per Assignment
         if (surfaceTypeDao.findAll().isEmpty()) {
 
             SurfaceType clay = new SurfaceType();
@@ -59,7 +68,23 @@ public class DataInitializer implements CommandLineRunner {
             court4.setSurfaceType(grass);
             courtDao.save(court4);
 
-            System.out.println("Database was initialized with default data.");
+            System.out.println("Database was initialized with default court and surface data.");
+        }
+        //Seeding User roles
+        if (appUserDao.findAll().isEmpty()) {
+            AppUser admin = new AppUser();
+            admin.setUsername("admin");
+            admin.setPassword(passwordEncoder.encode("admin"));
+            admin.setRole(Role.ROLE_ADMIN);
+            appUserDao.save(admin);
+
+            AppUser user = new AppUser();
+            user.setUsername("user");
+            user.setPassword(passwordEncoder.encode("user"));
+            user.setRole(Role.ROLE_USER);
+            appUserDao.save(user);
+
+            System.out.println("Database was initialized with default user and admin");
         }
     }
 }
