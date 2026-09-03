@@ -10,7 +10,7 @@ public class GlobalExceptionHandler {
 
     //400
     @ExceptionHandler
-    public ResponseEntity<Object> handleReservationException(ReservationException ex) {
+    public ResponseEntity<Object> handleReservationException(RuntimeException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
@@ -26,13 +26,13 @@ public class GlobalExceptionHandler {
 
     //401
     @ExceptionHandler
-    public ResponseEntity<Object> handleUnauthorizedException(RuntimeException ex) {
+    public ResponseEntity<Object> handleUnauthorizedException(AuthorizationException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
     }
 
     //403
     @ExceptionHandler
-    public ResponseEntity<Object> handleForbiddenException(RuntimeException ex) {
+    public ResponseEntity<Object> handleForbiddenException(ForbiddenException ex) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
     }
 }

@@ -35,30 +35,30 @@ public class ReservationService {
             throw new ReservationException("End time must be after start time");
         }
 
-        if (dto.getStartTime().isAfter(dto.getEndTime()) || dto.getStartTime().isEqual(dto.getEndTime())) {
-            throw new ReservationException("End time must be after start time");
-        }
-
         Court court = courtDao.findById(dto.getCourtNumber())
                 .orElseThrow(() -> new ReservationException("Selected Court does not exist."));
 
         if (!reservationDao.isFreeTimeSlot(court.getCourtNumber(), dto.getStartTime(), dto.getEndTime())) {
-            throw new ReservationException("End time must be after start time");
+            throw new ReservationException("Selected time slot is already reserved");
         }
 
-        Customer customer = customerDao.findByPhoneNumber(dto.getCustomerPhoneNumber()).orElseGet(() -> {
+        Customer customer = customerDao.findByPhoneNumber(dto.getPhoneNumber()).orElseGet(() -> {
             Customer newCustomer = new Customer();
-            newCustomer.setPhoneNumber(dto.getCustomerPhoneNumber());
+            newCustomer.setPhoneNumber(dto.getPhoneNumber());
             newCustomer.setName(dto.getCustomerName());
+            newCustomer = customerDao.save(newCustomer);
             return newCustomer;
         });
 
         Long duration = Duration.between(dto.getStartTime(), dto.getEndTime()).toMinutes();
         BigDecimal pricePerMinute = court.getSurfaceType().getPricePerMinute();
         BigDecimal price = pricePerMinute.multiply(BigDecimal.valueOf(duration));
-
+        System.out.println("Price singles: " + price);
         if (dto.isDoubles()) {
-            price = pricePerMinute.multiply(new BigDecimal("1.5"));
+
+            price = price.multiply(new BigDecimal("1.5"));
+            System.out.println("Price doubles: " + price);
+
         }
 
         Reservation reservation = new Reservation();
