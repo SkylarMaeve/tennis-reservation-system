@@ -14,21 +14,19 @@ import java.util.List;
 public class SurfaceTypeService {
     private final SurfaceTypeDao surfaceTypeDao;
 
-    public SurfaceTypeService (SurfaceTypeDao surfaceTypeDao) {
+    public SurfaceTypeService(SurfaceTypeDao surfaceTypeDao) {
         this.surfaceTypeDao = surfaceTypeDao;
     }
 
-    public SurfaceTypeDto create(SurfaceTypeDto dto)
-    {
-        SurfaceType surfaceType = new  SurfaceType();
+    public SurfaceTypeDto create(SurfaceTypeDto dto) {
+        SurfaceType surfaceType = new SurfaceType();
         surfaceType.setName(dto.getSurfaceTypeName());
         surfaceType.setPricePerMinute(dto.getPricePerMinute());
         SurfaceType saved = surfaceTypeDao.save(surfaceType);
         return new SurfaceTypeDto(saved);
     }
 
-    public SurfaceTypeDto get(Long id)
-    {
+    public SurfaceTypeDto get(Long id) {
         SurfaceType surfaceType = surfaceTypeDao.findById(id)
                 .orElseThrow(() -> new SurfaceException("Surface type not found"));
 
@@ -39,8 +37,7 @@ public class SurfaceTypeService {
         return surfaceTypeDao.findAll().stream().map(SurfaceTypeDto::new).toList();
     }
 
-    public SurfaceTypeDto update(Long id, SurfaceTypeDto dto )
-    {
+    public SurfaceTypeDto update(Long id, SurfaceTypeDto dto) {
         SurfaceType surfaceType = surfaceTypeDao.findById(id)
                 .orElseThrow(() -> new SurfaceException("Surface type not found"));
 

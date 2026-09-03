@@ -28,13 +28,11 @@ public class AppUserDao {
     }
 
     public Optional<AppUser> findByUsername(String username) {
-        StringBuilder textQuery = new StringBuilder(
-                "SELECT u " +
+        String textQuery = "SELECT u " +
                 "FROM AppUser u  " +
-                "WHERE u.deleted = false AND u.username = :username"
-        );
+                "WHERE u.deleted = false AND u.username = :username";
 
-        var query = em.createQuery(textQuery.toString()).setParameter("username", username);
+        var query = em.createQuery(textQuery).setParameter("username", username);
         AppUser user = (AppUser) query.getSingleResultOrNull();
         return (user != null && !user.isDeleted()) ? Optional.of(user) : Optional.empty();
     }
@@ -45,12 +43,10 @@ public class AppUserDao {
     }
 
     public List<AppUser> findAll() {
-        StringBuilder textQuery = new StringBuilder(
-                "SELECT u " +
-                        "FROM AppUser u  " +
-                        "WHERE u.deleted = false"
-        );
+        String textQuery = "SELECT u " +
+                "FROM AppUser u  " +
+                "WHERE u.deleted = false";
 
-        return em.createQuery(textQuery.toString(), AppUser.class).getResultList();
+        return em.createQuery(textQuery, AppUser.class).getResultList();
     }
 }

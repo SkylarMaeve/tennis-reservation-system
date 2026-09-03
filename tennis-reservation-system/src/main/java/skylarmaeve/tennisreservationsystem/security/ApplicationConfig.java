@@ -17,6 +17,7 @@ public class ApplicationConfig {
     public ApplicationConfig(AppUserDao appUserDao) {
         this.appUserDao = appUserDao;
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

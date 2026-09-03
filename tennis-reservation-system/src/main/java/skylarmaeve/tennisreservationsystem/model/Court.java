@@ -12,9 +12,8 @@ import lombok.Setter;
 @Getter
 @Entity
 @Table(name = "courts")
-public class Court extends BaseEntity
-{
-    @Column(nullable = false,  unique = true)
+public class Court extends BaseEntity {
+    @Column(nullable = false, unique = true)
     private Integer courtNumber;
 
     @ManyToOne(optional = false)

@@ -25,7 +25,7 @@ public class CourtService {
 
     public CourtDto create(CourtDto dto) {
         if (courtDao.findByCourtNumber(dto.getCourtNumber()).isPresent()) {
-            throw new CourtException("Court number: "  + dto.getCourtNumber() + " is already is use");
+            throw new CourtException("Court number: " + dto.getCourtNumber() + " is already is use");
         }
 
         SurfaceType surfaceType = surfaceTypeDao.findById(dto.getSurfaceTypeId())
@@ -35,7 +35,7 @@ public class CourtService {
         court.setSurfaceType(surfaceType);
         court.setCourtNumber(dto.getCourtNumber());
 
-        Court saved =  courtDao.save(court);
+        Court saved = courtDao.save(court);
         return new CourtDto(saved);
     }
 
@@ -60,7 +60,7 @@ public class CourtService {
         court.setSurfaceType(surfaceType);
         court.setCourtNumber(dto.getCourtNumber());
 
-        Court saved =  courtDao.save(court);
+        Court saved = courtDao.save(court);
         return new CourtDto(saved);
     }
 

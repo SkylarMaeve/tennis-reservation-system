@@ -10,9 +10,8 @@ import lombok.Setter;
 @Getter
 @Entity
 @Table(name = "customers")
-public class Customer extends BaseEntity
-{
-    @Column(nullable = false,  unique = true)
+public class Customer extends BaseEntity {
+    @Column(nullable = false, unique = true)
     private String phoneNumber;
 
     @Column(nullable = false)

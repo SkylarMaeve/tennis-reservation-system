@@ -14,7 +14,7 @@ public class SurfaceTypeDao {
     private EntityManager em;
 
     public SurfaceType save(SurfaceType surfaceType) {
-        if  (surfaceType.getId() == null) {
+        if (surfaceType.getId() == null) {
             em.persist(surfaceType);
             return surfaceType;
         }
@@ -23,17 +23,15 @@ public class SurfaceTypeDao {
 
     public Optional<SurfaceType> findById(long id) {
         SurfaceType surfaceType = em.find(SurfaceType.class, id);
-        return (surfaceType != null && !surfaceType.isDeleted()) ? Optional.of(surfaceType): Optional.empty();
+        return (surfaceType != null && !surfaceType.isDeleted()) ? Optional.of(surfaceType) : Optional.empty();
     }
 
     public List<SurfaceType> findAll() {
-        StringBuilder textQuery = new StringBuilder(
-                "SELECT s " +
+        String textQuery = "SELECT s " +
                 "FROM SurfaceType s  " +
-                "WHERE s.deleted = false"
-        );
+                "WHERE s.deleted = false";
 
-        return em.createQuery(textQuery.toString(), SurfaceType.class).getResultList();
+        return em.createQuery(textQuery, SurfaceType.class).getResultList();
     }
 
     public void delete(SurfaceType surfaceType) {

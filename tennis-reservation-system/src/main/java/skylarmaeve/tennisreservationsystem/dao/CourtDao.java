@@ -14,7 +14,7 @@ public class CourtDao {
     private EntityManager em;
 
     public Court save(Court court) {
-        if  (court.getId() == null) {
+        if (court.getId() == null) {
             em.persist(court);
             return court;
         }
@@ -23,18 +23,16 @@ public class CourtDao {
 
     public Optional<Court> findById(long id) {
         Court court = em.find(Court.class, id);
-        return (court != null && !court.isDeleted()) ? Optional.of(court): Optional.empty();
+        return (court != null && !court.isDeleted()) ? Optional.of(court) : Optional.empty();
     }
 
     public Optional<Court> findByCourtNumber(Integer courtNumber) {
-        StringBuilder textQuery = new StringBuilder(
-                "SELECT c " +
+        String textQuery = "SELECT c " +
                 "FROM Court c  " +
-                "WHERE c.deleted = false AND c.courtNumber = :courtNumber"
-        );
-        var query = em.createQuery(textQuery.toString()).setParameter("courtNumber", courtNumber);
+                "WHERE c.deleted = false AND c.courtNumber = :courtNumber";
+        var query = em.createQuery(textQuery).setParameter("courtNumber", courtNumber);
         Court court = (Court) query.getSingleResultOrNull();
-        return (court != null && !court.isDeleted()) ? Optional.of(court): Optional.empty();
+        return (court != null && !court.isDeleted()) ? Optional.of(court) : Optional.empty();
     }
 
 
@@ -44,12 +42,10 @@ public class CourtDao {
     }
 
     public List<Court> findAll() {
-        StringBuilder textQuery = new StringBuilder(
-                "SELECT c " +
+        String textQuery = "SELECT c " +
                 "FROM Court c  " +
-                "WHERE c.deleted = false"
-        );
+                "WHERE c.deleted = false";
 
-        return em.createQuery(textQuery.toString(), Court.class).getResultList();
+        return em.createQuery(textQuery, Court.class).getResultList();
     }
 }

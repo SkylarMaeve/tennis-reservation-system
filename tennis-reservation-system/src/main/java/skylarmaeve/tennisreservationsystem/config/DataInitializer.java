@@ -24,7 +24,7 @@ public class DataInitializer implements CommandLineRunner {
     private final AppUserDao appUserDao;
     private final PasswordEncoder passwordEncoder;
 
-    public DataInitializer(SurfaceTypeDao surfaceTypeDao, CourtDao courtDao,  AppUserDao appUserDao,  PasswordEncoder passwordEncoder) {
+    public DataInitializer(SurfaceTypeDao surfaceTypeDao, CourtDao courtDao, AppUserDao appUserDao, PasswordEncoder passwordEncoder) {
         this.surfaceTypeDao = surfaceTypeDao;
         this.courtDao = courtDao;
         this.appUserDao = appUserDao;

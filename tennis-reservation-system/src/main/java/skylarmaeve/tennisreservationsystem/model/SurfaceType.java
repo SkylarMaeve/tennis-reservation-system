@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @Getter
 @Entity
 @Table(name = "surface_types")
-public class SurfaceType extends BaseEntity{
+public class SurfaceType extends BaseEntity {
 
     @Column(nullable = false)
     private String name;

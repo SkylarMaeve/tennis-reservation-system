@@ -6,7 +6,8 @@ import java.math.BigDecimal;
 
 @Getter
 public class PriceResponseDto {
-    private BigDecimal price;
+    private final BigDecimal price;
+
     public PriceResponseDto(BigDecimal price) {
         this.price = price;
     }

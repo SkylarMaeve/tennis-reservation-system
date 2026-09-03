@@ -15,6 +15,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import skylarmaeve.tennisreservationsystem.service.JwtService;
 
 import java.io.IOException;
+
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;

@@ -16,7 +16,7 @@ public class ReservationDao {
     private EntityManager em;
 
     public Reservation save(Reservation reservation) {
-        if  (reservation.getId() == null) {
+        if (reservation.getId() == null) {
             em.persist(reservation);
             return reservation;
         }
@@ -25,7 +25,7 @@ public class ReservationDao {
 
     public Optional<Reservation> findById(long id) {
         Reservation reservation = em.find(Reservation.class, id);
-        return (reservation != null && !reservation.isDeleted()) ? Optional.of(reservation): Optional.empty();
+        return (reservation != null && !reservation.isDeleted()) ? Optional.of(reservation) : Optional.empty();
     }
 
     public void delete(Reservation reservation) {
@@ -34,44 +34,39 @@ public class ReservationDao {
     }
 
     public List<Reservation> findByCourtNumber(Integer courtNumber) {
-        StringBuilder textQuery = new StringBuilder(
-                "SELECT reservation " +
+        String textQuery = "SELECT reservation " +
                 "FROM Reservation reservation " +
-                "WHERE reservation.court.courtNumber = :courtNumber AND reservation.deleted = false "+
-                "ORDER BY reservation.createdAt ASC"
-        );
-        var query = em.createQuery(textQuery.toString(),  Reservation.class)
+                "WHERE reservation.court.courtNumber = :courtNumber AND reservation.deleted = false " +
+                "ORDER BY reservation.createdAt ASC";
+        var query = em.createQuery(textQuery, Reservation.class)
                 .setParameter("courtNumber", courtNumber);
         return query.getResultList();
     }
-    public boolean isFreeTimeSlot(Integer courtNumber, LocalDateTime startTime, LocalDateTime endTime)
-    {
+
+    public boolean isFreeTimeSlot(Integer courtNumber, LocalDateTime startTime, LocalDateTime endTime) {
         return isFreeTimeSlot(courtNumber, startTime, endTime, null);
     }
 
-    public boolean isFreeTimeSlot(Integer courtNumber, LocalDateTime startTime, LocalDateTime endTime, Long oldReservationId)
-    {
+    public boolean isFreeTimeSlot(Integer courtNumber, LocalDateTime startTime, LocalDateTime endTime, Long oldReservationId) {
         StringBuilder textQuery = new StringBuilder(
                 "SELECT reservation " +
-                "FROM Reservation reservation " +
-                "WHERE reservation.court.courtNumber = :courtNumber " +
+                        "FROM Reservation reservation " +
+                        "WHERE reservation.court.courtNumber = :courtNumber " +
                         "AND reservation.startTime < :endTime " +
-                        "AND reservation.endTime > :startTime "+
+                        "AND reservation.endTime > :startTime " +
                         "AND reservation.deleted = false"
 
         );
-        if (oldReservationId != null)
-        {
+        if (oldReservationId != null) {
             textQuery.append(" AND reservation.id != :oldReservationId ");
         }
 
-        var query = em.createQuery(textQuery.toString(),  Reservation.class)
+        var query = em.createQuery(textQuery.toString(), Reservation.class)
                 .setParameter("courtNumber", courtNumber)
                 .setParameter("startTime", startTime)
                 .setParameter("endTime", endTime);
 
-        if (oldReservationId != null)
-        {
+        if (oldReservationId != null) {
             query.setParameter("oldReservationId", oldReservationId);
         }
 
@@ -79,19 +74,18 @@ public class ReservationDao {
     }
 
 
-
     public List<Reservation> findByPhoneNumber(String phoneNumber, boolean onlyFuture) {
         StringBuilder textQuery = new StringBuilder(
                 "SELECT reservation " +
-                "FROM Reservation reservation " +
-                "WHERE reservation.customer.phoneNumber = :phoneNumber AND reservation.deleted = false"
+                        "FROM Reservation reservation " +
+                        "WHERE reservation.customer.phoneNumber = :phoneNumber AND reservation.deleted = false"
         );
         if (onlyFuture) {
             textQuery.append(" AND reservation.startTime > :now");
         }
 
-        var query = em.createQuery(textQuery.toString(),  Reservation.class)
-                    .setParameter("phoneNumber", phoneNumber);
+        var query = em.createQuery(textQuery.toString(), Reservation.class)
+                .setParameter("phoneNumber", phoneNumber);
         if (onlyFuture) {
             query.setParameter("now", LocalDateTime.now());
         }
@@ -99,13 +93,11 @@ public class ReservationDao {
     }
 
     public List<Reservation> findAll() {
-        StringBuilder textQuery = new StringBuilder(
-                "SELECT r " +
+        String textQuery = "SELECT r " +
                 "FROM Reservation r  " +
-                "WHERE r.deleted = false"
-        );
+                "WHERE r.deleted = false";
 
-        return em.createQuery(textQuery.toString(), Reservation.class).getResultList();
+        return em.createQuery(textQuery, Reservation.class).getResultList();
     }
 
 

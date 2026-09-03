@@ -5,18 +5,19 @@ import skylarmaeve.tennisreservationsystem.model.Reservation;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
 @Getter
 public class ReservationResponseDto {
-    private Long id;
-    private Integer courtNumber;
-    private String customerName;
-    private String customerPhoneNumber;
+    private final Long id;
+    private final Integer courtNumber;
+    private final String customerName;
+    private final String customerPhoneNumber;
 
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private final LocalDateTime startTime;
+    private final LocalDateTime endTime;
 
-    private boolean isDoubles;
-    private BigDecimal price;
+    private final boolean isDoubles;
+    private final BigDecimal price;
 
     public ReservationResponseDto(Reservation reservation) {
         this.id = reservation.getId();

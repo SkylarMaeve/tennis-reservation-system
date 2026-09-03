@@ -6,13 +6,14 @@ import org.springframework.stereotype.Repository;
 import skylarmaeve.tennisreservationsystem.model.Customer;
 
 import java.util.Optional;
+
 @Repository
 public class CustomerDao {
     @PersistenceContext
     private EntityManager em;
 
     public Customer save(Customer customer) {
-        if  (customer.getId() == null) {
+        if (customer.getId() == null) {
             em.persist(customer);
             return customer;
         }
@@ -21,19 +22,17 @@ public class CustomerDao {
 
     public Optional<Customer> findById(long id) {
         Customer customer = em.find(Customer.class, id);
-        return (customer != null && !customer.isDeleted()) ? Optional.of(customer): Optional.empty();
+        return (customer != null && !customer.isDeleted()) ? Optional.of(customer) : Optional.empty();
     }
 
     public Optional<Customer> findByPhoneNumber(String phoneNumber) {
-        StringBuilder textQuery = new StringBuilder(
-                "SELECT c " +
+        String textQuery = "SELECT c " +
                 "FROM Customer c  " +
-                "WHERE c.deleted = false AND c.phoneNumber = :phoneNumber"
-        );
+                "WHERE c.deleted = false AND c.phoneNumber = :phoneNumber";
 
-        var query = em.createQuery(textQuery.toString()).setParameter("phoneNumber", phoneNumber);
+        var query = em.createQuery(textQuery).setParameter("phoneNumber", phoneNumber);
         Customer customer = (Customer) query.getSingleResultOrNull();
-        return (customer != null && !customer.isDeleted()) ? Optional.of(customer): Optional.empty();
+        return (customer != null && !customer.isDeleted()) ? Optional.of(customer) : Optional.empty();
     }
 
     public void delete(Customer reservation) {
