@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import skylarmaeve.tennisreservationsystem.dto.PriceResponseDto;
-import skylarmaeve.tennisreservationsystem.dto.ReservationRequestDto;
-import skylarmaeve.tennisreservationsystem.dto.ReservationResponseDto;
+import skylarmaeve.tennisreservationsystem.dto.ReservationDto;
 import skylarmaeve.tennisreservationsystem.service.ReservationService;
 
 import java.util.List;
@@ -28,36 +27,36 @@ public class ReservationController {
     }
 
     @PostMapping
-    public ResponseEntity<PriceResponseDto> createReservation(@RequestBody ReservationRequestDto dto) {
+    public ResponseEntity<PriceResponseDto> createReservation(@RequestBody ReservationDto dto) {
         var price = reservationService.create(dto).getPrice();
         return ResponseEntity.status(HttpStatus.CREATED).body(new PriceResponseDto(price));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ReservationResponseDto> getReservation(@PathVariable Long id) {
+    public ResponseEntity<ReservationDto> getReservation(@PathVariable Long id) {
         return ResponseEntity.ok(reservationService.get(id));
     }
 
     @GetMapping
-    public ResponseEntity<List<ReservationResponseDto>> getAllReservations() {
+    public ResponseEntity<List<ReservationDto>> getAllReservations() {
         return ResponseEntity.ok(reservationService.getAll());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ReservationResponseDto> updateReservation(
+    public ResponseEntity<ReservationDto> updateReservation(
             @PathVariable Long id,
-            @RequestBody ReservationRequestDto dto) {
+            @RequestBody ReservationDto dto) {
         var response = reservationService.update(id, dto);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("court/{courtNumber}")
-    public ResponseEntity<List<ReservationResponseDto>> getReservation(@PathVariable Integer courtNumber) {
+    public ResponseEntity<List<ReservationDto>> getReservation(@PathVariable Integer courtNumber) {
         return ResponseEntity.ok(reservationService.getReservationsByCourtNumber(courtNumber));
     }
 
     @GetMapping("/phone/{phoneNumber}")
-    public ResponseEntity<List<ReservationResponseDto>> getReservationsByPhone(
+    public ResponseEntity<List<ReservationDto>> getReservationsByPhone(
             @PathVariable String phoneNumber,
             @RequestParam(defaultValue = "false") boolean onlyFuture) {
         return ResponseEntity.ok(reservationService.getReservationsByPhoneNumber(phoneNumber, onlyFuture));

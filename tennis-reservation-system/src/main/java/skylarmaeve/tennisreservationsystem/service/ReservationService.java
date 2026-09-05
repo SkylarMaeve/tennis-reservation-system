@@ -5,8 +5,7 @@ import org.springframework.stereotype.Service;
 import skylarmaeve.tennisreservationsystem.dao.CourtDao;
 import skylarmaeve.tennisreservationsystem.dao.CustomerDao;
 import skylarmaeve.tennisreservationsystem.dao.ReservationDao;
-import skylarmaeve.tennisreservationsystem.dto.ReservationRequestDto;
-import skylarmaeve.tennisreservationsystem.dto.ReservationResponseDto;
+import skylarmaeve.tennisreservationsystem.dto.ReservationDto;
 import skylarmaeve.tennisreservationsystem.exception.ReservationException;
 import skylarmaeve.tennisreservationsystem.model.Court;
 import skylarmaeve.tennisreservationsystem.model.Customer;
@@ -30,7 +29,7 @@ public class ReservationService {
     }
 
 
-    public ReservationResponseDto create(ReservationRequestDto dto) {
+    public ReservationDto create(ReservationDto dto) {
         if (dto.getStartTime().isAfter(dto.getEndTime()) || dto.getStartTime().isEqual(dto.getEndTime())) {
             throw new ReservationException("End time must be after start time");
         }
@@ -50,7 +49,7 @@ public class ReservationService {
             return newCustomer;
         });
 
-        Long duration = Duration.between(dto.getStartTime(), dto.getEndTime()).toMinutes();
+        long duration = Duration.between(dto.getStartTime(), dto.getEndTime()).toMinutes();
         BigDecimal pricePerMinute = court.getSurfaceType().getPricePerMinute();
         BigDecimal price = pricePerMinute.multiply(BigDecimal.valueOf(duration));
         System.out.println("Price singles: " + price);
@@ -71,34 +70,34 @@ public class ReservationService {
         reservation.setPrice(price);
 
         reservationDao.save(reservation);
-        return new ReservationResponseDto(reservation);
+        return new ReservationDto(reservation);
     }
 
-    public ReservationResponseDto get(Long id) {
+    public ReservationDto get(Long id) {
         Reservation reservation = reservationDao.findById(id)
                 .orElseThrow(() -> new ReservationException("Reservation not found."));
-        return new ReservationResponseDto(reservation);
+        return new ReservationDto(reservation);
     }
 
-    public List<ReservationResponseDto> getAll() {
+    public List<ReservationDto> getAll() {
         return reservationDao.findAll()
-                .stream().map(ReservationResponseDto::new)
+                .stream().map(ReservationDto::new)
                 .toList();
     }
 
-    public List<ReservationResponseDto> getReservationsByCourtNumber(Integer courtNumber) {
+    public List<ReservationDto> getReservationsByCourtNumber(Integer courtNumber) {
         return reservationDao.findByCourtNumber(courtNumber)
-                .stream().map(ReservationResponseDto::new)
+                .stream().map(ReservationDto::new)
                 .toList();
     }
 
-    public List<ReservationResponseDto> getReservationsByPhoneNumber(String phoneNumber, boolean onlyFuture) {
+    public List<ReservationDto> getReservationsByPhoneNumber(String phoneNumber, boolean onlyFuture) {
         return reservationDao.findByPhoneNumber(phoneNumber, onlyFuture)
-                .stream().map(ReservationResponseDto::new)
+                .stream().map(ReservationDto::new)
                 .toList();
     }
 
-    public ReservationResponseDto update(Long id, ReservationRequestDto dto) {
+    public ReservationDto update(Long id, ReservationDto dto) {
         Reservation reservation = reservationDao.findById(id)
                 .orElseThrow(() -> new ReservationException("Reservation not found."));
 
@@ -106,29 +105,27 @@ public class ReservationService {
         if (!isFree) {
             throw new ReservationException("Reservation slot is full");
         }
-
-        Long duration = Duration.between(dto.getStartTime(), dto.getEndTime()).toMinutes();
-        BigDecimal pricePerMinute = reservation.getCourt().getSurfaceType().getPricePerMinute();
+        Court court = courtDao.findById(dto.getCourtNumber())
+                .orElseThrow(() -> new ReservationException("Selected Court does not exist."));
 
         reservation.setStartTime(dto.getStartTime());
         reservation.setEndTime(dto.getEndTime());
-        reservation.setPrice(pricePerMinute.multiply(BigDecimal.valueOf(duration)));
+        reservation.setDoubles(dto.isDoubles());
+        reservation.setCourt(court);
 
-        if (reservation.isDoubles() != dto.isDoubles()) {
-            reservation.setDoubles(dto.isDoubles());
-            BigDecimal price = reservation.getPrice();
+        long duration = Duration.between(dto.getStartTime(), dto.getEndTime()).toMinutes();
+        BigDecimal pricePerMinute = reservation.getCourt().getSurfaceType().getPricePerMinute();
 
-            // From Single to Doubles
-            if (reservation.isDoubles()) {
-                reservation.setPrice(price.multiply(new BigDecimal("1.5")));
-            } else // From Doubles to Singles
-            {
-                reservation.setPrice(price.divide(new BigDecimal("1.5")));
-            }
+
+
+        BigDecimal price = pricePerMinute.multiply(BigDecimal.valueOf(duration));
+        if (dto.isDoubles()) {
+            price = price.multiply(new BigDecimal("1.5"));
         }
+        reservation.setPrice(price);
 
         reservationDao.save(reservation);
-        return new ReservationResponseDto(reservation);
+        return new ReservationDto(reservation);
     }
 
     public void delete(Long id) {

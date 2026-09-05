@@ -51,6 +51,11 @@ public class SurfaceTypeService {
     public void delete(Long id) {
         SurfaceType surfaceType = surfaceTypeDao.findById(id)
                 .orElseThrow(() -> new SurfaceException("Selected Surface does not exist."));
+
+        int courts = surfaceTypeDao.surfaceTypeUsed(surfaceType.getId());
+        if (courts != 0) {
+            throw new SurfaceException("SurfaceType is used in: " + courts + " courts.");
+        }
         surfaceTypeDao.delete(surfaceType);
     }
 }

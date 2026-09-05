@@ -13,6 +13,9 @@ public class SurfaceTypeDto {
     private String surfaceTypeName;
     private BigDecimal pricePerMinute;
 
+    public SurfaceTypeDto() {
+    }
+
     public SurfaceTypeDto(SurfaceType surfaceType) {
         this.surfaceTypeId = surfaceType.getId();
         this.surfaceTypeName = surfaceType.getName();

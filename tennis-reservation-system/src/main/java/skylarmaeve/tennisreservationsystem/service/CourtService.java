@@ -9,6 +9,7 @@ import skylarmaeve.tennisreservationsystem.exception.CourtException;
 import skylarmaeve.tennisreservationsystem.model.Court;
 import skylarmaeve.tennisreservationsystem.model.SurfaceType;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -28,8 +29,7 @@ public class CourtService {
             throw new CourtException("Court number: " + dto.getCourtNumber() + " is already is use");
         }
 
-        SurfaceType surfaceType = surfaceTypeDao.findById(dto.getSurfaceTypeId())
-                .orElseThrow(() -> new CourtException("Selected Surface Type does not exist."));
+        SurfaceType surfaceType = surfaceTypeDao.findById(dto.getSurfaceTypeId()).orElseThrow(() -> new CourtException("Selected Surface Type does not exist."));
 
         Court court = new Court();
         court.setSurfaceType(surfaceType);
@@ -40,8 +40,7 @@ public class CourtService {
     }
 
     public CourtDto get(Long id) {
-        Court court = courtDao.findById(id)
-                .orElseThrow(() -> new CourtException("Court not found"));
+        Court court = courtDao.findById(id).orElseThrow(() -> new CourtException("Court not found"));
 
         return new CourtDto(court);
     }
@@ -51,11 +50,9 @@ public class CourtService {
     }
 
     public CourtDto update(Long id, CourtDto dto) {
-        Court court = courtDao.findById(id)
-                .orElseThrow(() -> new CourtException("Selected Court does not exist."));
+        Court court = courtDao.findById(id).orElseThrow(() -> new CourtException("Selected Court does not exist."));
 
-        SurfaceType surfaceType = surfaceTypeDao.findById(dto.getSurfaceTypeId())
-                .orElseThrow(() -> new CourtException("Selected Surface Type does not exist."));
+        SurfaceType surfaceType = surfaceTypeDao.findById(dto.getSurfaceTypeId()).orElseThrow(() -> new CourtException("Selected Surface Type does not exist."));
 
         court.setSurfaceType(surfaceType);
         court.setCourtNumber(dto.getCourtNumber());
@@ -65,8 +62,15 @@ public class CourtService {
     }
 
     public void delete(Long id) {
-        Court court = courtDao.findById(id)
-                .orElseThrow(() -> new CourtException("Selected Court does not exist."));
+        Court court = courtDao.findById(id).orElseThrow(() -> new CourtException("Selected Court does not exist."));
+
+        int reservations = courtDao.courtUsedInFuture(court.getId());
+        if (reservations != 0) {
+            BigDecimal futureCost = courtDao.courtUsedInFutureCost(court.getId());
+            throw new CourtException("Court is reserved in future. Solve the: " + reservations +
+                    " reservation(s) first. Total cost: " + futureCost);
+        }
+
         courtDao.delete(court);
     }
 }
