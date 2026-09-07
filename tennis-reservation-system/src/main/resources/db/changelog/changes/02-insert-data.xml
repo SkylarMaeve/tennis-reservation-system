@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="02-insert-data" author="developer" context="seed">
+
+        <insert tableName="surface_types">
+            <column name="id" valueNumeric="1"/>
+            <column name="deleted" valueBoolean="false"/>
+            <column name="name" value="Clay"/>
+            <column name="price_per_minute" valueNumeric="1.50"/>
+        </insert>
+
+        <insert tableName="surface_types">
+            <column name="id" valueNumeric="2"/>
+            <column name="deleted" valueBoolean="false"/>
+            <column name="name" value="Grass"/>
+            <column name="price_per_minute" valueNumeric="1"/>
+        </insert>
+
+        <insert tableName="courts">
+            <column name="id" valueNumeric="1"/>
+            <column name="deleted" valueBoolean="false"/>
+            <column name="court_number" valueNumeric="1"/>
+            <column name="surface_type_id" valueNumeric="1"/>
+        </insert>
+
+        <insert tableName="courts">
+            <column name="id" valueNumeric="2"/>
+            <column name="deleted" valueBoolean="false"/>
+            <column name="court_number" valueNumeric="2"/>
+            <column name="surface_type_id" valueNumeric="1"/>
+        </insert>
+
+        <insert tableName="courts">
+            <column name="id" valueNumeric="3"/>
+            <column name="deleted" valueBoolean="false"/>
+            <column name="court_number" valueNumeric="3"/>
+            <column name="surface_type_id" valueNumeric="2"/>
+        </insert>
+
+        <insert tableName="courts">
+            <column name="id" valueNumeric="4"/>
+            <column name="deleted" valueBoolean="false"/>
+            <column name="court_number" valueNumeric="4"/>
+            <column name="surface_type_id" valueNumeric="2"/>
+        </insert>
+
+    </changeSet>
+
+</databaseChangeLog>
