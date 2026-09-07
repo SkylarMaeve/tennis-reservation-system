@@ -52,11 +52,9 @@ public class ReservationService {
         long duration = Duration.between(dto.getStartTime(), dto.getEndTime()).toMinutes();
         BigDecimal pricePerMinute = court.getSurfaceType().getPricePerMinute();
         BigDecimal price = pricePerMinute.multiply(BigDecimal.valueOf(duration));
-        System.out.println("Price singles: " + price);
         if (dto.isDoubles()) {
 
             price = price.multiply(new BigDecimal("1.5"));
-            System.out.println("Price doubles: " + price);
 
         }
 

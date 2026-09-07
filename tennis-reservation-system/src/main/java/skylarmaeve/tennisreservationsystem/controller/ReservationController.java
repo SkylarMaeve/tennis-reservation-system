@@ -51,7 +51,7 @@ public class ReservationController {
     }
 
     @GetMapping("court/{courtNumber}")
-    public ResponseEntity<List<ReservationDto>> getReservation(@PathVariable Integer courtNumber) {
+    public ResponseEntity<List<ReservationDto>> getReservationsByCourtNumber(@PathVariable Integer courtNumber) {
         return ResponseEntity.ok(reservationService.getReservationsByCourtNumber(courtNumber));
     }
 
