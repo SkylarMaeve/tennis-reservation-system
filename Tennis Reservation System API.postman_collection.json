@@ -1,0 +1,740 @@
+{
+  "info": {
+    "_postman_id": "b5C00e7BaADF9a3d1DC0fDC9",
+    "name": "Tennis Reservation System API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "court",
+      "item": [
+        {
+          "name": "Create Court",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/courts",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "courts"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzg4NTk2NzU3LCJleHAiOjE3ODg2MDAzNTd9.ui6NgR6t496eazBRfjoF6LwcIQ50KdOn-CzSnyIHMU4",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"courtNumber\": 10,\n  \"surfaceTypeId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Creation of new Court.\n\n**Required body:**\n\n| **Key** | **Description** |\n| --- | --- |\n| **courtNumber**  <br>**surfaceTypeId** | number for the Court  <br>Id of existing SurfaceType |\n\n**Response status:**\n\nStatus 201\n\n**Response body:**\n\n| **Key** | **Description** |\n| --- | --- |\n| **courtId  <br>courtNumber**  <br>**surfaceTypeId**  <br>**surfaceTypeName** | Id of the court  <br>number of court  <br>Id of associated Surface Type  <br>Name of associated Surface Type |\n\n**Authorization:**\n\nRequires Token for authorization"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Court",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/courts/:id",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "courts",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzg4NjAwNDg0LCJleHAiOjE3ODg2MDQwODR9.19WmvNddTgxuSEv76dPzGYzJmm7xpgNVhVwECFNmK3I",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Delete Court by Id.\n\n**Required body/parameters:**\n\n| **Parameter** | **Description** |\n| --- | --- |\n| **:id** | id of the court |\n\n**Response status:**\n\nStatus 204\n\n**Response body:**\n\n\\-\n\n**Authorization:**\n\nRequires Token for authorization"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Courts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/courts",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "courts"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzg4NTk2NzU3LCJleHAiOjE3ODg2MDAzNTd9.ui6NgR6t496eazBRfjoF6LwcIQ50KdOn-CzSnyIHMU4",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Get all existing Courts.\n\n**Required body/parameters:**\n\n**\\-**\n\n**Response status:**\n\nStatus 200\n\n**Response body:**\n\nList of Courts\n\n| **Key** | **Description** |\n| --- | --- |\n| **courtId**  <br>**courtNumber**  <br>**surfaceTypeId**  <br>**surfaceTypeName** | Id of the court  <br>number of court  <br>Id of associated Surface Type  <br>Name of associated Surface Type |\n\n**Authorization:**\n\nRequires Token for authorization"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Court By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/courts/:id",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "courts",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzg4NTk2NzU3LCJleHAiOjE3ODg2MDAzNTd9.ui6NgR6t496eazBRfjoF6LwcIQ50KdOn-CzSnyIHMU4",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Get Court by Id.\n\n**Required body/parameters:**\n\n| **PathVariable** | **Description** |\n| --- | --- |\n| **:id** | id of the court |\n\n**Response status:**\n\nStatus 200\n\n**Response body:**\n\n| **Key** | **Description** |\n| --- | --- |\n| **courtId**  <br>**courtNumber**  <br>**surfaceTypeId**  <br>**surfaceTypeName** | Id of the court  <br>number of court  <br>Id of associated Surface Type  <br>Name of associated Surface Type |\n\n**Authorization:**\n\nRequires Token for authorization"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Court By Id",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/courts/:id",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "courts",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "\"{\\r",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Get Court by Id.\n\n**Required body/parameters:**\n\n| **PathVariable** | **Description** |\n| --- | --- |\n| **:id** | id of the court |\n\n| **Key** | **Description** |\n| --- | --- |\n| **surfaceTypeId**  <br>**courtNumber** | new Id of Surface Type  <br>new number of court |\n\n**Response status:**\n\nStatus 200\n\n**Response body:**\n\n| **Key** | **Description** |\n| --- | --- |\n| **courtId**  <br>**courtNumber**  <br>**surfaceTypeId**  <br>**surfaceTypeName** | Id of the court  <br>number of court  <br>Id of associated Surface Type  <br>Name of associated Surface Type |\n\n**Authorization:**\n\nRequires Token for authorization"
+          },
+          "response": []
+        }
+      ],
+      "description": "Folder containing CRUD API operations for Courts."
+    },
+    {
+      "name": "auth",
+      "item": [
+        {
+          "name": "Admin Authorization",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            },
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "admin",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "admin",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Authorization of **Admin** user type with Basic authorization\n\n**Response status:**\n\nStatus 200\n\n**Response header:**\n\n**Authorization:** Authorization Token for interaction with API\n\n**Authorization:**\n\nNot required."
+          },
+          "response": []
+        },
+        {
+          "name": "User Authorization",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            },
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "user",
+                  "type": "string"
+                },
+                {
+                  "key": "password",
+                  "value": "user",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Authorization of User user type with Basic authorization\n\n**Response status:**\n\nStatus 200\n\n**Response header:**\n\n**Authorization:** Authorization Token for interaction with API\n\n**Authorization:**\n\nNot required."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "reservation",
+      "item": [
+        {
+          "name": "Create Reservation",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/reservations",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "reservations"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzg4NjAwNDg0LCJleHAiOjE3ODg2MDQwODR9.19WmvNddTgxuSEv76dPzGYzJmm7xpgNVhVwECFNmK3I",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"courtNumber\": 1,\n  \"customerName\": \"SkylarMaeve\",\n  \"phoneNumber\": \"+420777123456\",\n  \"startTime\": \"2026-09-14T14:00:00\",\n  \"endTime\": \"2026-09-14T15:30:00\",\n  \"isDoubles\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Create new Reservation\n\n**Required body/parameters:**\n\n| **Key** | **Value** |\n| --- | --- |\n| **courtNumber**  <br>**customerName**  <br>**phoneNumber**  <br>**startTime**  <br>**endTime**  <br>**isDoubles** | number of the court  <br>name of customer  <br>phone number  <br>start time  <br>end time  <br>bool indicating Doubles game |\n\n**Response status:**\n\nStatus 201\n\n**Response body:**\n\n| **Key** | **Description** |\n| --- | --- |\n| **price** | price of the reservation |\n\n**Authorization:**\n\nRequires Token for authorization"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Reservation",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/courts/:id",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "courts",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": ""
+                }
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzg4NTk2NzU3LCJleHAiOjE3ODg2MDAzNTd9.ui6NgR6t496eazBRfjoF6LwcIQ50KdOn-CzSnyIHMU4",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Delete Reservation by Id.\n\n**Required body/parameters:**\n\n| **PathVariable** | **Description** |\n| --- | --- |\n| **:id** | id of the reservation |\n\n**Response status:**\n\nStatus 204\n\n**Response body:**\n\n\\-\n\n**Authorization:**\n\nRequires Token for authorization"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Reservations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/reservations",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "reservations"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzg4NjAwNDg0LCJleHAiOjE3ODg2MDQwODR9.19WmvNddTgxuSEv76dPzGYzJmm7xpgNVhVwECFNmK3I",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Get all Reservations\n\n**Required body/parameters:**\n\n\\-\n\n**Response status:**\n\nStatus 200\n\n**Response body:**\n\nList of Reservations\n\n| **Key** | **Value** |\n| --- | --- |\n| **courtNumber**  <br>**customerName**  <br>**phoneNumber**  <br>**startTime**  <br>**endTime**  <br>**isDoubles**  <br>**price**  <br>**reservationId**  <br>**createdAt** | number of the court  <br>name of customer  <br>phone number  <br>start time  <br>end time  <br>bool indicating Doubles game  <br>price of the game  <br>id of the reservation  <br>time of creation of the reservation |\n\n**Authorization:**\n\nRequires Token for authorization"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Reservation By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/reservations/:id",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "reservations",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzg4NTk2NzU3LCJleHAiOjE3ODg2MDAzNTd9.ui6NgR6t496eazBRfjoF6LwcIQ50KdOn-CzSnyIHMU4",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Get Reservation by Id.\n\n**Required body/parameters:**\n\n| **PathVariable** | **Description** |\n| --- | --- |\n| **:id** | id of the reservation |\n\n**Response status:**\n\nStatus 200\n\n**Response body:**\n\n| **Key** | **Description** |\n| --- | --- |\n| **courtNumber**  <br>**customerName**  <br>**phoneNumber**  <br>**startTime**  <br>**endTime**  <br>**isDoubles**  <br>**price**  <br>**reservationId**  <br>**createdAt** | number of the court  <br>name of customer  <br>phone number  <br>start time  <br>end time  <br>bool indicating Doubles game  <br>price of the game  <br>id of the reservation  <br>time of creation of the reservation |\n\n**Authorization:**\n\nRequires Token for authorization"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Reservations By courtNumber",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/reservations/court/:courtNumber",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "reservations",
+                "court",
+                ":courtNumber"
+              ],
+              "variable": [
+                {
+                  "key": "courtNumber",
+                  "value": "1"
+                }
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzg4NTk2NzU3LCJleHAiOjE3ODg2MDAzNTd9.ui6NgR6t496eazBRfjoF6LwcIQ50KdOn-CzSnyIHMU4",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Get Reservation by courtNumber .\n\n**Required body/parameters:**\n\n| **PathVariable** | **Description** |\n| --- | --- |\n| :courtNumber | Number of court |\n\n**Response status:**\n\nStatus 200\n\n**Response body:**\n\n| **Key** | **Description** |\n| --- | --- |\n| **courtNumber**  <br>**customerName**  <br>**phoneNumber**  <br>**startTime**  <br>**endTime**  <br>**isDoubles**  <br>**price**  <br>**reservationId**  <br>**createdAt** | number of the court  <br>name of customer  <br>phone number  <br>start time  <br>end time  <br>bool indicating Doubles game  <br>price of the game  <br>id of the reservation  <br>time of creation of the reservation |\n\n**Authorization:**\n\nRequires Token for authorization"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Reservations by phoneNumber",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/reservations/phone/phoneNumber?onlyFuture=false",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "reservations",
+                "phone",
+                "phoneNumber"
+              ],
+              "query": [
+                {
+                  "key": "onlyFuture",
+                  "value": "false"
+                }
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Get Reservation by Id.\n\n**Required body/parameters:**\n\n| **PathVariable** | **Description** |\n| --- | --- |\n| :phoneNumber | phoneNumber |\n\n| **Query Parameter** | **Description** |\n| --- | --- |\n| onlyFuture | filter for only future reservations |\n\n**Response status:**\n\nStatus 200\n\n**Response body:**\n\nList of Reservations\n\n| **Key** | **Description** |\n| --- | --- |\n| **courtNumber**  <br>**customerName**  <br>**phoneNumber**  <br>**startTime**  <br>**endTime**  <br>**isDoubles**  <br>**price**  <br>**reservationId**  <br>**createdAt** | number of the court  <br>name of customer  <br>phone number  <br>start time  <br>end time  <br>bool indicating Doubles game  <br>price of the game  <br>id of the reservation  <br>time of creation of the reservation |\n\n**Authorization:**\n\nRequires Token for authorization"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Reservation By Id",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/reservations/:id",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "reservations",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "\"{\\r",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Get Reservation by Id.\n\n**Required body/parameters:**\n\n| **PathVariable** | **Description** |\n| --- | --- |\n| **:id** | id of the reservation |\n\n| **Optional Key** | **Description** |\n| --- | --- |\n| **courtNumber**  <br>**startTime**  <br>**endTime**  <br>**isDoubles** | number of the court  <br>start time  <br>end time  <br>bool indicating Doubles game |\n\n**Response status:**\n\nStatus 200\n\n**Response body:**\n\n| **Key** | **Description** |\n| --- | --- |\n| **courtNumber**  <br>**customerName**  <br>**phoneNumber**  <br>**startTime**  <br>**endTime**  <br>**isDoubles**  <br>**price**  <br>**reservationId**  <br>**createdAt** | number of the court  <br>name of customer  <br>phone number  <br>start time  <br>end time  <br>bool indicating Doubles game  <br>price of the game  <br>id of the reservation  <br>time of creation of the reservation |\n\n**Authorization:**\n\nRequires Token for authorization"
+          },
+          "response": []
+        }
+      ],
+      "description": "Folder containing CRUD API operations and other operations for Reservation."
+    },
+    {
+      "name": "surfaces",
+      "item": [
+        {
+          "name": "Create SurfaceType",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/surfaces",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "surfaces"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzg4NTk2NzU3LCJleHAiOjE3ODg2MDAzNTd9.ui6NgR6t496eazBRfjoF6LwcIQ50KdOn-CzSnyIHMU4",
+                  "type": "string"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"surfaceTypeName\": \"concrete\",\n  \"pricePerMinute\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Creation of new Surface Type.\n\n**Required body/parameters:**\n\n| **Key** | **Description** |\n| --- | --- |\n| **surfaceTypeName**  <br>**pricePerMinute** | name of the surface type  <br>price per minute |\n\n**Response status:**\n\nStatus 201\n\n**Response body:**\n\n| **Key** | **Description** |\n| --- | --- |\n| **surfaceTypeId**  <br>**surfaceTypeName**  <br>**pricePerMinute** | Id of Surface Type  <br>Name of Surface Type  <br>price per minute |\n\n**Authorization:**\n\nRequires Token for authorization"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete SurfaceType",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/surfaces/:id",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "surfaces",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1",
+                  "description": ""
+                }
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzg4NjAxNzYyLCJleHAiOjE3ODg2MDUzNjJ9.WfHq1Q720Ja2qWg7gjvzFD5eb2G807mKxJceVPq_R80",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Delete SurfaceType by Id.\n\n**Required body/parameters:**\n\n| **PathVariable** | **Description** |\n| --- | --- |\n| **:id** | id of the surfaceType |\n\n**Response status:**\n\nStatus 204\n\n**Response body:**\n\n\\-\n\n**Authorization:**\n\nRequires Token for authorization"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All SurfaceTypes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/surfaces",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "surfaces"
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzg4NTk2NzU3LCJleHAiOjE3ODg2MDAzNTd9.ui6NgR6t496eazBRfjoF6LwcIQ50KdOn-CzSnyIHMU4",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Get all SurfaceTypes\n\n**Required body/parameters:**\n\n\\-\n\n**Response status:**\n\nStatus 200\n\n**Response body:**\n\nList of SurfaceTypes\n\n| **Key** | **Value** |\n| --- | --- |\n| **surfaceTypeId**  <br>**surfaceTypeName**  <br>**pricePerMinute** | Id of Surface Type  <br>Name of Surface Type  <br>price per minute |\n\n**Authorization:**\n\nRequires Token for authorization"
+          },
+          "response": []
+        },
+        {
+          "name": "Get SurfaceType By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/surfaces/:id",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "surfaces",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "2",
+                  "description": ""
+                }
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJST0xFX0FETUlOIiwiaWF0IjoxNzg4NTk2NzU3LCJleHAiOjE3ODg2MDAzNTd9.ui6NgR6t496eazBRfjoF6LwcIQ50KdOn-CzSnyIHMU4",
+                  "type": "string"
+                }
+              ]
+            },
+            "description": "Get SurfacType by Id.\n\n**Required body/parameters:**\n\n| **PathVariable** | **Description** |\n| --- | --- |\n| **:id** | id of the surfaceType |\n\n**Response status:**\n\nStatus 200\n\n**Response body:**\n\n| **Key** | **Description** |\n| --- | --- |\n| **surfaceTypeId**  <br>**surfaceTypeName**  <br>**pricePerMinute** | Id of Surface Type  <br>Name of Surface Type  <br>price per minute |\n\n**Authorization:**\n\nRequires Token for authorization"
+          },
+          "response": []
+        },
+        {
+          "name": "Update SurfaceType By Id",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/surfaces/:id",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "surfaces",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "3",
+                  "description": ""
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "\"{\\r",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Get SurfacType by Id.\n\n**Required body/parameters:**\n\n| **PathVariable** | **Description** |\n| --- | --- |\n| **:id** | id of the surfaceType |\n\n| **Key** | **Description** |\n| --- | --- |\n| **surfaceTypeName**  <br>**pricePerMinute** | name of the surface type  <br>price per minute |\n\n**Response status:**\n\nStatus 200\n\n**Response body:**\n\n| **Key** | **Description** |\n| --- | --- |\n| **surfaceTypeId**  <br>**surfaceTypeName**  <br>**pricePerMinute** | Id of Surface Type  <br>Name of Surface Type  <br>price per minute |\n\n**Authorization:**\n\nRequires Token for authorization"
+          },
+          "response": []
+        }
+      ],
+      "description": "Folder containing CRUD API operations and other operations for Surface types."
+    }
+  ]
+}
