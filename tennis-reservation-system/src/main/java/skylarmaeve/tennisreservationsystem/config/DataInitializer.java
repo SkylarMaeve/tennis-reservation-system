@@ -21,20 +21,16 @@ public class DataInitializer implements CommandLineRunner {
 
     private final SurfaceTypeDao surfaceTypeDao;
     private final CourtDao courtDao;
-    private final AppUserDao appUserDao;
-    private final PasswordEncoder passwordEncoder;
 
-    public DataInitializer(SurfaceTypeDao surfaceTypeDao, CourtDao courtDao, AppUserDao appUserDao, PasswordEncoder passwordEncoder) {
+
+    public DataInitializer(SurfaceTypeDao surfaceTypeDao, CourtDao courtDao) {
         this.surfaceTypeDao = surfaceTypeDao;
         this.courtDao = courtDao;
-        this.appUserDao = appUserDao;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     @Transactional
     public void run(String... args) {
-        //Seeding as per Assignment
         if (surfaceTypeDao.findAll().isEmpty()) {
 
             SurfaceType clay = new SurfaceType();
@@ -69,22 +65,6 @@ public class DataInitializer implements CommandLineRunner {
             courtDao.save(court4);
 
             System.out.println("Database was initialized with default court and surface data.");
-        }
-        //Seeding User roles
-        if (appUserDao.findAll().isEmpty()) {
-            AppUser admin = new AppUser();
-            admin.setUsername("admin");
-            admin.setPassword(passwordEncoder.encode("admin"));
-            admin.setRole(Role.ROLE_ADMIN);
-            appUserDao.save(admin);
-
-            AppUser user = new AppUser();
-            user.setUsername("user");
-            user.setPassword(passwordEncoder.encode("user"));
-            user.setRole(Role.ROLE_USER);
-            appUserDao.save(user);
-
-            System.out.println("Database was initialized with default user and admin");
         }
     }
 }
