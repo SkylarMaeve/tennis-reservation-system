@@ -6,14 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager;
 import org.springframework.context.annotation.Import;
+import skylarmaeve.tennisreservationsystem.util.ModelFactory;
 import skylarmaeve.tennisreservationsystem.model.Court;
 import skylarmaeve.tennisreservationsystem.model.Customer;
 import skylarmaeve.tennisreservationsystem.model.Reservation;
 import skylarmaeve.tennisreservationsystem.model.SurfaceType;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -21,186 +20,196 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
-@Import({ReservationDao.class})
+@Import({CourtDao.class, SurfaceTypeDao.class, ReservationDao.class, CustomerDao.class})
 public class ReservationDaoTests {
+
+    @Autowired
+    private CourtDao courtDao;
+    @Autowired
+    private SurfaceTypeDao surfaceTypeDao;
     @Autowired
     private ReservationDao reservationDao;
+    @Autowired
+    private CustomerDao customerDao;
 
     @Autowired
     private TestEntityManager entityManager;
 
-    private SurfaceType grass;
-    private Customer customer;
-    private Court court;
-
     @BeforeEach
     void setUp() {
-        grass = new SurfaceType();
-        grass.setName("Grass");
-        grass.setPricePerMinute(BigDecimal.valueOf(0.50));
-        entityManager.persist(grass);
-        entityManager.flush();
-
-        customer = new Customer();
-        customer.setName("Uriel");
-        customer.setPhoneNumber("123456789");
-        entityManager.persist(customer);
-        entityManager.flush();
-
-        court = new Court();
-        court.setCourtNumber(1);
-        court.setSurfaceType(grass);
-        entityManager.persist(court);
-        entityManager.flush();
-
         entityManager.clear();
     }
 
-    Reservation getReservation() {
-        Reservation reservation = new Reservation();
-        reservation.setCourt(court);
-        reservation.setCustomer(customer);
-        reservation.setDoubles(false);
-        reservation.setStartTime(LocalDateTime.now());
-        reservation.setEndTime(LocalDateTime.now());
-        reservation.setPrice(BigDecimal.valueOf(300));
-        return reservation;
+    @Test
+    void testSaveAndFindByIdTrue(){
+        SurfaceType surfaceType = ModelFactory.makeSurfaceType("grass");
+        surfaceType = surfaceTypeDao.save(surfaceType);
+
+        Court court = ModelFactory.makeCourt(surfaceType, 1);
+        court = courtDao.save(court);
+
+        Customer customer = ModelFactory.makeCustomer("123456789");
+        customer = customerDao.save(customer);
+
+        Reservation reservation = ModelFactory.makeReservation(court, customer);
+        reservation = reservationDao.save(reservation);
+
+        assertNotNull(reservation.getId());
+
+        assertTrue(reservationDao.findById(reservation.getId()).isPresent());
+    }
+
+    @Test
+    void testFindByIdFalse(){
+        assertTrue(reservationDao.findById(547).isEmpty());
+    }
+
+    @Test
+    void testFindAll(){
+        SurfaceType surfaceType = ModelFactory.makeSurfaceType("grass");
+        surfaceType = surfaceTypeDao.save(surfaceType);
+
+        Court court = ModelFactory.makeCourt(surfaceType, 1);
+        court = courtDao.save(court);
+
+        Customer customer = ModelFactory.makeCustomer("123456789");
+        customer = customerDao.save(customer);
+
+        Reservation reservation = ModelFactory.makeReservation(court, customer);
+        reservation = reservationDao.save(reservation);
+
+        var reservations = reservationDao.findAll();
+        assertEquals(1, reservations.size());
+    }
+
+    @Test
+    void testFindByCourtNumber()
+    {
+        SurfaceType surfaceType = ModelFactory.makeSurfaceType("grass");
+        surfaceType = surfaceTypeDao.save(surfaceType);
+
+        Court court = ModelFactory.makeCourt(surfaceType, 69);
+        court = courtDao.save(court);
+
+        Customer customer = ModelFactory.makeCustomer("123456789");
+        customer = customerDao.save(customer);
+
+        Reservation reservation = ModelFactory.makeReservation(court, customer);
+        reservation = reservationDao.save(reservation);
+
+        var reservations = reservationDao.findByCourtNumber(69);
+        assertEquals(1, reservations.size());
     }
 
     @Test
     void testFindByPhoneNumber()
     {
-        Reservation firstReservation = getReservation();
-        Reservation secondReservation = getReservation();
+        SurfaceType surfaceType = ModelFactory.makeSurfaceType("grass");
+        surfaceType = surfaceTypeDao.save(surfaceType);
 
-        Reservation differentCustomerReservation = getReservation();
-        Customer differentCustomer = new Customer();
-        differentCustomer.setName("Azrael");
-        differentCustomer.setPhoneNumber("987654321");
-        differentCustomerReservation.setCustomer(differentCustomer);
-        entityManager.persist(differentCustomer);
-        entityManager.flush();
+        Court court = ModelFactory.makeCourt(surfaceType, 69);
+        court = courtDao.save(court);
 
-        reservationDao.save(firstReservation);
-        reservationDao.save(secondReservation);
-        reservationDao.save(differentCustomerReservation);
+        Customer customer = ModelFactory.makeCustomer("123456789");
+        customer = customerDao.save(customer);
 
-        List<Reservation> reservations = reservationDao.findByPhoneNumber("123456789", false);
-        assertEquals(2, reservations.size());
+        Reservation reservation = ModelFactory.makeReservation(court, customer);
+        reservation = reservationDao.save(reservation);
 
-        List<Reservation> allReservations = reservationDao.findAll();
-        assertEquals(3, allReservations.size());
-    }
-    @Test
-    void testFindByPhoneNumberOnlyFuture()
-    {
-        Reservation firstReservation = getReservation();
-        Reservation secondReservation = getReservation();
-
-        firstReservation.setStartTime(LocalDateTime.now().minusDays(1));
-        firstReservation.setEndTime(LocalDateTime.now().minusDays(1));
-
-        secondReservation.setStartTime(LocalDateTime.now().plusDays(1));
-        secondReservation.setEndTime(LocalDateTime.now().plusDays(1));
-
-        reservationDao.save(firstReservation);
-        reservationDao.save(secondReservation);
-
-        List<Reservation> reservations = reservationDao.findByPhoneNumber("123456789", true);
-        assertEquals(1, reservations.size());
-
-
-        List<Reservation> allReservations = reservationDao.findAll();
-        assertEquals(2, allReservations.size());
-
-    }
-
-    @Test
-    void testSaveAndFindByCourtNumber()
-    {
-        Reservation firstReservation = getReservation();
-        Reservation secondReservation = getReservation();
-
-        Court secondCourt = new Court();
-        secondCourt.setCourtNumber(2);
-        secondCourt.setSurfaceType(grass);
-        entityManager.persist(secondCourt);
-        entityManager.flush();
-
-        secondReservation.setCourt(secondCourt);
-
-        reservationDao.save(firstReservation);
-        reservationDao.save(secondReservation);
-
-        List<Reservation> reservations = reservationDao.findByCourtNumber(2);
+        var reservations = reservationDao.findByPhoneNumber("123456789", false);
         assertEquals(1, reservations.size());
     }
+
     @Test
-    void testNoOverlap()
+    void testFindByPhoneNumberFuture()
     {
-        LocalDateTime firstReservationStartTime = LocalDateTime.now();
-        LocalDateTime firstReservationEndTime = firstReservationStartTime.plusHours(1);
+        SurfaceType surfaceType = ModelFactory.makeSurfaceType("grass");
+        surfaceType = surfaceTypeDao.save(surfaceType);
 
-        Reservation reservation = new Reservation();
-        reservation.setCourt(court);
-        reservation.setCustomer(customer);
-        reservation.setDoubles(false);
-        reservation.setStartTime(firstReservationStartTime);
-        reservation.setEndTime(firstReservationEndTime);
-        reservation.setPrice(BigDecimal.valueOf(300));
+        Court court = ModelFactory.makeCourt(surfaceType, 69);
+        court = courtDao.save(court);
 
-        reservationDao.save(reservation);
-        entityManager.flush();
+        Customer customer = ModelFactory.makeCustomer("123456789");
+        customer = customerDao.save(customer);
 
+        Reservation reservationFirst = ModelFactory.makeReservation(court, customer);
+        reservationFirst = reservationDao.save(reservationFirst);
 
-        assertTrue(reservationDao.isFreeTimeSlot(court.getCourtNumber(), firstReservationEndTime, firstReservationEndTime.plusHours(1)));
+        Reservation reservationSecond = ModelFactory.makeReservation(court, customer);
+        reservationSecond.setStartTime(LocalDateTime.now().plusDays(1));
+        reservationSecond.setEndTime(LocalDateTime.now().plusHours(25));
+        reservationSecond = reservationDao.save(reservationSecond);
+
+        var reservations = reservationDao.findByPhoneNumber("123456789", true);
+        assertEquals(1, reservations.size());
+        assertEquals(reservationSecond,  reservations.get(0));
     }
 
     @Test
-    void testOverlap()
+    void testFreeTimeSlotFalse()
     {
-        LocalDateTime firstReservationStartTime = LocalDateTime.now();
-        LocalDateTime firstReservationEndTime = LocalDateTime.now().plusHours(1);
+        SurfaceType surfaceType = ModelFactory.makeSurfaceType("grass");
+        surfaceType = surfaceTypeDao.save(surfaceType);
 
-        Reservation reservation = new Reservation();
-        reservation.setCourt(court);
-        reservation.setCustomer(customer);
-        reservation.setDoubles(false);
-        reservation.setStartTime(firstReservationStartTime);
-        reservation.setEndTime(firstReservationEndTime);
-        reservation.setPrice(BigDecimal.valueOf(300));
+        Court court = ModelFactory.makeCourt(surfaceType, 69);
+        court = courtDao.save(court);
 
-        reservationDao.save(reservation);
-        entityManager.flush();
+        Customer customer = ModelFactory.makeCustomer("123456789");
+        customer = customerDao.save(customer);
 
-        LocalDateTime secondReservationStartTime = firstReservationStartTime.plusMinutes(30);
+        Reservation reservationFirst = ModelFactory.makeReservation(court, customer);
+        reservationFirst = reservationDao.save(reservationFirst);
 
-        assertFalse(reservationDao.isFreeTimeSlot(court.getCourtNumber(), secondReservationStartTime, firstReservationEndTime));
+        Reservation reservationSecond = ModelFactory.makeReservation(court, customer);
+
+        assertFalse(reservationDao.isFreeTimeSlot(69, reservationSecond.getStartTime(), reservationSecond.getEndTime()));
     }
+
+    @Test
+    void testFreeTimeSlotTrue()
+    {
+        SurfaceType surfaceType = ModelFactory.makeSurfaceType("grass");
+        surfaceType = surfaceTypeDao.save(surfaceType);
+
+        Court court = ModelFactory.makeCourt(surfaceType, 69);
+        court = courtDao.save(court);
+
+        Customer customer = ModelFactory.makeCustomer("123456789");
+        customer = customerDao.save(customer);
+
+        Reservation reservationFirst = ModelFactory.makeReservation(court, customer);
+        reservationFirst = reservationDao.save(reservationFirst);
+
+        Reservation reservationSecond = ModelFactory.makeReservation(court, customer);
+        reservationSecond.setStartTime(LocalDateTime.now().plusDays(1));
+        reservationSecond.setStartTime(LocalDateTime.now().plusHours(25));
+
+        assertTrue(reservationDao.isFreeTimeSlot(69, reservationSecond.getStartTime(), reservationSecond.getEndTime()));
+    }
+
 
     @Test
     void testSoftDelete()
     {
-        Reservation reservation = new Reservation();
-        reservation.setCourt(court);
-        reservation.setCustomer(customer);
-        reservation.setDoubles(false);
-        reservation.setStartTime(LocalDateTime.now());
-        reservation.setEndTime(LocalDateTime.now().plusHours(1));
-        reservation.setPrice(BigDecimal.valueOf(300));
+        SurfaceType surfaceType = ModelFactory.makeSurfaceType("grass");
+        surfaceType = surfaceTypeDao.save(surfaceType);
 
-        reservationDao.save(reservation);
-        entityManager.flush();
+        Court court = ModelFactory.makeCourt(surfaceType, 69);
+        court = courtDao.save(court);
 
-        List<Reservation> savedCourts = reservationDao.findAll();
-        assertEquals(1, savedCourts.size());
+        Customer customer = ModelFactory.makeCustomer("123456789");
+        customer = customerDao.save(customer);
+
+        Reservation reservation = ModelFactory.makeReservation(court, customer);
+        reservation = reservationDao.save(reservation);
 
         reservationDao.delete(reservation);
+
+        assertTrue(reservationDao.findByCourtNumber(69).isEmpty());
 
         Reservation databaseReservation = entityManager.find(Reservation.class, reservation.getId());
         assertNotNull(databaseReservation);
         assertTrue(databaseReservation.isDeleted());
-        assertTrue(reservationDao.findAll().isEmpty());
     }
 
 }

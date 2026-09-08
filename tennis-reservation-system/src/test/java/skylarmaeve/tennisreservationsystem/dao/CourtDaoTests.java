@@ -6,66 +6,138 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager;
 import org.springframework.context.annotation.Import;
+import skylarmaeve.tennisreservationsystem.util.ModelFactory;
 import skylarmaeve.tennisreservationsystem.model.Court;
+import skylarmaeve.tennisreservationsystem.model.Customer;
+import skylarmaeve.tennisreservationsystem.model.Reservation;
 import skylarmaeve.tennisreservationsystem.model.SurfaceType;
 
-import java.math.BigDecimal;
-import java.util.List;
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
-@Import(CourtDao.class)
+@Import({CourtDao.class, SurfaceTypeDao.class, ReservationDao.class, CustomerDao.class})
 public class CourtDaoTests {
+
     @Autowired
     private CourtDao courtDao;
+    @Autowired
+    private SurfaceTypeDao surfaceTypeDao;
+    @Autowired
+    private ReservationDao reservationDao;
+    @Autowired
+    private CustomerDao customerDao;
 
     @Autowired
     private TestEntityManager entityManager;
 
-    private SurfaceType grass;
 
     @BeforeEach
     void setUp() {
-        grass = new SurfaceType();
-        grass.setName("Grass");
-        grass.setPricePerMinute(BigDecimal.valueOf(0.5));
-        entityManager.persist(grass);
-        entityManager.flush();
+        entityManager.clear();
+    }
+
+    @Test
+    void testSaveAndFindByIdTrue(){
+        SurfaceType surfaceType = ModelFactory.makeSurfaceType("grass");
+        surfaceType = surfaceTypeDao.save(surfaceType);
+
+        Court court = ModelFactory.makeCourt(surfaceType, 1);
+        court = courtDao.save(court);
+
+        assertNotNull(court.getId());
+
+        assertTrue(courtDao.findById(court.getId()).isPresent());
+    }
+
+    @Test
+    void testFindByIdFalse(){
+        assertTrue(courtDao.findById(547).isEmpty());
+    }
+
+    @Test
+    void testFindAll(){
+        SurfaceType surfaceType = ModelFactory.makeSurfaceType("grass");
+        surfaceType = surfaceTypeDao.save(surfaceType);
+
+        Court court = ModelFactory.makeCourt(surfaceType, 1);
+        court = courtDao.save(court);
+
+        var courts = courtDao.findAll();
+        assertEquals(1, courts.size());
+    }
+
+    @Test
+    void testCourtUsedInFuture(){
+        SurfaceType surfaceType = ModelFactory.makeSurfaceType("grass");
+        surfaceType = surfaceTypeDao.save(surfaceType);
+
+        Court court = ModelFactory.makeCourt(surfaceType, 1);
+        court = courtDao.save(court);
+
+        Customer customer = ModelFactory.makeCustomer("123456789");
+        customer = customerDao.save(customer);
+
+        Reservation reservation = ModelFactory.makeReservation(court, customer);
+        reservation.setStartTime(LocalDateTime.now().plusDays(1));
+        reservation.setEndTime(LocalDateTime.now().plusHours(25));
+        reservation = reservationDao.save(reservation);
+
+
+        assertEquals(1, courtDao.courtUsedInFuture(court.getId()));
+    }
+
+    @Test
+    void testCourtUsedInFutureCost(){
+        SurfaceType surfaceType = ModelFactory.makeSurfaceType("grass");
+        surfaceType = surfaceTypeDao.save(surfaceType);
+
+        Court court = ModelFactory.makeCourt(surfaceType, 1);
+        court = courtDao.save(court);
+
+        Customer customer = ModelFactory.makeCustomer("123456789");
+        customer = customerDao.save(customer);
+
+        Reservation reservation = ModelFactory.makeReservation(court, customer);
+        reservation.setStartTime(LocalDateTime.now().plusDays(1));
+        reservation.setEndTime(LocalDateTime.now().plusHours(25));
+
+        reservation = reservationDao.save(reservation);
+
+        assertEquals(reservation.getPrice().stripTrailingZeros(), courtDao.courtUsedInFutureCost(court.getId()).stripTrailingZeros());
     }
 
 
     @Test
-    void testSaveAndFindByCourtNumber()
+    void testFindByCourtNumber()
     {
-        Court court = new Court();
-        court.setCourtNumber(2);
-        court.setSurfaceType(grass);
+        SurfaceType surfaceType = ModelFactory.makeSurfaceType("grass");
+        surfaceType = surfaceTypeDao.save(surfaceType);
 
-        courtDao.save(court);
+        Court court = ModelFactory.makeCourt(surfaceType, 69);
+        court = courtDao.save(court);
 
-        List<Court> savedCourts = courtDao.findAll();
-        assertEquals(1, savedCourts.size());
-        assertEquals(2, savedCourts.get(0).getCourtNumber());
+        assertTrue(courtDao.findByCourtNumber(69).isPresent());
+
     }
 
     @Test
     void testSoftDelete()
     {
-        Court court = new Court();
-        court.setCourtNumber(1);
-        court.setSurfaceType(grass);
+        SurfaceType surfaceType = ModelFactory.makeSurfaceType("grass");
+        surfaceType = surfaceTypeDao.save(surfaceType);
 
-        courtDao.save(court);
+        Court court = ModelFactory.makeCourt(surfaceType, 3);
+        court = courtDao.save(court);
 
         courtDao.delete(court);
 
-        List<Court> savedCourts = courtDao.findAll();
-        assertEquals(0, savedCourts.size());
+        assertTrue(courtDao.findByCourtNumber(3).isEmpty());
 
-        Court databaseCourt = entityManager.find(Court.class, 1);
+        Court databaseCourt = entityManager.find(Court.class, court.getId());
         assertNotNull(databaseCourt);
         assertTrue(databaseCourt.isDeleted());
     }
