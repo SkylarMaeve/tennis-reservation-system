@@ -86,6 +86,50 @@ public class ReservationServiceTests {
     }
 
     @Test
+    public void testCreateNewCustomer() {
+        ReservationDto dto = new ReservationDto();
+        dto.setCourtNumber(1);
+        dto.setDoubles(false);
+        dto.setPhoneNumber("123456789");
+        dto.setCustomerName("customer");
+        dto.setStartTime(LocalDateTime.now().plusHours(1));
+        dto.setEndTime(LocalDateTime.now().plusHours(2));
+
+        SurfaceType surfaceType = new SurfaceType();
+        surfaceType.setPricePerMinute(BigDecimal.valueOf(1));
+        surfaceType.setName("grass");
+
+        Court court = new Court();
+        court.setId(1L);
+        court.setCourtNumber(1);
+        court.setSurfaceType(surfaceType);
+
+        Customer customer = new Customer();
+        customer.setId(1L);
+        customer.setName("customer");
+        customer.setPhoneNumber("123456789");
+
+        Reservation reservation = new Reservation();
+        reservation.setId(1L);
+        reservation.setCourt(court);
+        reservation.setCustomer(customer);
+        reservation.setStartTime(LocalDateTime.now().plusHours(1));
+        reservation.setEndTime(LocalDateTime.now().plusHours(2));
+        reservation.setDoubles(false);
+        reservation.setPrice(BigDecimal.valueOf(60));
+
+
+        when(courtDao.findById(1)).thenReturn(Optional.of(court));
+        when(reservationDao.isFreeTimeSlot(any(Integer.class), any(LocalDateTime.class), any(LocalDateTime.class))).thenReturn(true);
+        when(customerDao.findByPhoneNumber(any(String.class))).thenReturn(Optional.empty());
+        when(customerDao.save(any(Customer.class))).thenReturn(customer);
+        when(reservationDao.save(any(Reservation.class))).thenReturn(reservation);
+
+        var result = reservationService.create(dto);
+        assertEquals(BigDecimal.valueOf(60).stripTrailingZeros(), result.getPrice().stripTrailingZeros());
+    }
+
+    @Test
     public void testCreateErrorTime() {
         ReservationDto dto = new ReservationDto();
         dto.setCourtNumber(1);
@@ -142,6 +186,42 @@ public class ReservationServiceTests {
     public void testGet() {
         when(reservationDao.findById(1L)).thenReturn(Optional.empty());
         assertThrows(ReservationException.class, () -> reservationService.get(1L));
+    }
+
+    @Test
+    public void testGetAll() {
+        SurfaceType surfaceType = new SurfaceType();
+        surfaceType.setPricePerMinute(BigDecimal.valueOf(1));
+        surfaceType.setName("grass");
+
+        Court court = new Court();
+        court.setId(1L);
+        court.setCourtNumber(1);
+        court.setSurfaceType(surfaceType);
+
+        Customer customer = new Customer();
+        customer.setId(1L);
+        customer.setName("customer");
+        customer.setPhoneNumber("123456789");
+
+        Reservation reservation = new Reservation();
+        reservation.setId(1L);
+        reservation.setCourt(court);
+        reservation.setCustomer(customer);
+        reservation.setStartTime(LocalDateTime.now().plusHours(1));
+        reservation.setEndTime(LocalDateTime.now().plusHours(2));
+        reservation.setDoubles(false);
+        reservation.setPrice(BigDecimal.valueOf(60));
+
+        var list = new ArrayList<Reservation>();
+        list.add(reservation);
+
+        when(reservationDao.findAll()).thenReturn(list);
+
+        var result = reservationService.getAll();
+
+        assertEquals(1, result.size());
+        assertEquals(1, result.get(0).getCourtNumber());
     }
 
     @Test

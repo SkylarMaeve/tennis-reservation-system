@@ -41,7 +41,6 @@ public class CourtService {
 
     public CourtDto get(Long id) {
         Court court = courtDao.findById(id).orElseThrow(() -> new CourtException("Court not found"));
-
         return new CourtDto(court);
     }
 
@@ -70,7 +69,6 @@ public class CourtService {
             throw new CourtException("Court is reserved in future. Solve the: " + reservations +
                     " reservation(s) first. Total cost: " + futureCost);
         }
-
         courtDao.delete(court);
     }
 }

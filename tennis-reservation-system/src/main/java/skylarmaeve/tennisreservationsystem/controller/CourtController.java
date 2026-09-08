@@ -26,8 +26,7 @@ public class CourtController {
 
     @PostMapping
     public ResponseEntity<CourtDto> createCourt(@RequestBody CourtDto dto) {
-        var response = courtService.create(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(courtService.create(dto));
     }
 
     @GetMapping("/{id}")
@@ -44,8 +43,7 @@ public class CourtController {
     public ResponseEntity<CourtDto> updateCourt(
             @PathVariable Long id,
             @RequestBody CourtDto dto) {
-        var response = courtService.update(id, dto);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(courtService.update(id, dto));
     }
 
     @DeleteMapping("/{id}")

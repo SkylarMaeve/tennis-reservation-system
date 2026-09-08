@@ -29,7 +29,6 @@ public class SurfaceTypeService {
     public SurfaceTypeDto get(Long id) {
         SurfaceType surfaceType = surfaceTypeDao.findById(id)
                 .orElseThrow(() -> new SurfaceException("Surface type not found"));
-
         return new SurfaceTypeDto(surfaceType);
     }
 

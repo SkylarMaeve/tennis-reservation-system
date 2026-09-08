@@ -49,8 +49,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         } catch (Exception e) {
-            // Spring will Handle it
-
         }
 
         filterChain.doFilter(request, response);

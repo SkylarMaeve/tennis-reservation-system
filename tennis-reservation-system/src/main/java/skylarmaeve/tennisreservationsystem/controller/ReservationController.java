@@ -28,8 +28,7 @@ public class ReservationController {
 
     @PostMapping
     public ResponseEntity<PriceResponseDto> createReservation(@RequestBody ReservationDto dto) {
-        var price = reservationService.create(dto).getPrice();
-        return ResponseEntity.status(HttpStatus.CREATED).body(new PriceResponseDto(price));
+        return ResponseEntity.status(HttpStatus.CREATED).body(reservationService.create(dto));
     }
 
     @GetMapping("/{id}")

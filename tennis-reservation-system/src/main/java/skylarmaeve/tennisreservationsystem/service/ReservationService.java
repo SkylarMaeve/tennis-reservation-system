@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import skylarmaeve.tennisreservationsystem.dao.CourtDao;
 import skylarmaeve.tennisreservationsystem.dao.CustomerDao;
 import skylarmaeve.tennisreservationsystem.dao.ReservationDao;
+import skylarmaeve.tennisreservationsystem.dto.PriceResponseDto;
 import skylarmaeve.tennisreservationsystem.dto.ReservationDto;
 import skylarmaeve.tennisreservationsystem.exception.ReservationException;
 import skylarmaeve.tennisreservationsystem.model.Court;
@@ -29,7 +30,7 @@ public class ReservationService {
     }
 
 
-    public ReservationDto create(ReservationDto dto) {
+    public PriceResponseDto create(ReservationDto dto) {
         if (dto.getStartTime().isAfter(dto.getEndTime()) || dto.getStartTime().isEqual(dto.getEndTime())) {
             throw new ReservationException("End time must be after start time");
         }
@@ -68,7 +69,7 @@ public class ReservationService {
         reservation.setPrice(price);
 
         reservationDao.save(reservation);
-        return new ReservationDto(reservation);
+        return new PriceResponseDto(reservation.getPrice());
     }
 
     public ReservationDto get(Long id) {
@@ -113,8 +114,6 @@ public class ReservationService {
 
         long duration = Duration.between(dto.getStartTime(), dto.getEndTime()).toMinutes();
         BigDecimal pricePerMinute = reservation.getCourt().getSurfaceType().getPricePerMinute();
-
-
 
         BigDecimal price = pricePerMinute.multiply(BigDecimal.valueOf(duration));
         if (dto.isDoubles()) {

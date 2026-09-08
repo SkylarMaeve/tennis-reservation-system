@@ -26,8 +26,7 @@ public class SurfaceTypeController {
 
     @PostMapping
     public ResponseEntity<SurfaceTypeDto> createSurface(@RequestBody SurfaceTypeDto dto) {
-        var response = surfaceTypeService.create(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(surfaceTypeService.create(dto));
     }
 
     @GetMapping("/{id}")
@@ -44,8 +43,7 @@ public class SurfaceTypeController {
     public ResponseEntity<SurfaceTypeDto> updateSurface(
             @PathVariable Long id,
             @RequestBody SurfaceTypeDto dto) {
-        var response = surfaceTypeService.update(id, dto);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(surfaceTypeService.update(id, dto));
     }
 
     @DeleteMapping("/{id}")
