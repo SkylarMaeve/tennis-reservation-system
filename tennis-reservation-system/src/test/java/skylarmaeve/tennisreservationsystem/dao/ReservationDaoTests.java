@@ -60,6 +60,25 @@ public class ReservationDaoTests {
     }
 
     @Test
+    void testIsFreeTimeSlotOld(){
+
+        SurfaceType surfaceType = ModelFactory.makeSurfaceType("grass");
+        surfaceType = surfaceTypeDao.save(surfaceType);
+
+        Court court = ModelFactory.makeCourt(surfaceType, 1);
+        court = courtDao.save(court);
+
+        Customer customer = ModelFactory.makeCustomer("123456789");
+        customer = customerDao.save(customer);
+
+        Reservation reservation = ModelFactory.makeReservation(court, customer);
+        reservation = reservationDao.save(reservation);
+
+
+        assertTrue(reservationDao.isFreeTimeSlot(court.getCourtNumber(), reservation.getStartTime(), reservation.getEndTime(), reservation.getId()));
+    }
+
+    @Test
     void testFindByIdFalse(){
         assertTrue(reservationDao.findById(547).isEmpty());
     }

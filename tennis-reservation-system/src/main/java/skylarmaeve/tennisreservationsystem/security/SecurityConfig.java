@@ -16,11 +16,9 @@ import skylarmaeve.tennisreservationsystem.dao.AppUserDao;
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
-    private final AppUserDao appUserDao;
 
-    public SecurityConfig(JwtAuthenticationFilter jwtAuthFilter, AppUserDao appUserDao) {
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthFilter ) {
         this.jwtAuthFilter = jwtAuthFilter;
-        this.appUserDao = appUserDao;
     }
 
 

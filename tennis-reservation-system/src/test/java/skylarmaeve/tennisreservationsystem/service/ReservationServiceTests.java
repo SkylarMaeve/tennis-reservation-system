@@ -46,7 +46,7 @@ public class ReservationServiceTests {
     public void testCreate() {
         ReservationDto dto = new ReservationDto();
         dto.setCourtNumber(1);
-        dto.setDoubles(false);
+        dto.setDoubles(true);
         dto.setPhoneNumber("123456789");
         dto.setCustomerName("customer");
         dto.setStartTime(LocalDateTime.now().plusHours(1));
@@ -72,7 +72,7 @@ public class ReservationServiceTests {
         reservation.setCustomer(customer);
         reservation.setStartTime(LocalDateTime.now().plusHours(1));
         reservation.setEndTime(LocalDateTime.now().plusHours(2));
-        reservation.setDoubles(false);
+        reservation.setDoubles(true);
         reservation.setPrice(BigDecimal.valueOf(60));
 
 
@@ -82,7 +82,7 @@ public class ReservationServiceTests {
         when(reservationDao.save(any(Reservation.class))).thenReturn(reservation);
 
         var result = reservationService.create(dto);
-        assertEquals(BigDecimal.valueOf(60).stripTrailingZeros(), result.getPrice().stripTrailingZeros());
+        assertEquals(BigDecimal.valueOf(90).stripTrailingZeros(), result.getPrice().stripTrailingZeros());
     }
 
     @Test
@@ -130,7 +130,7 @@ public class ReservationServiceTests {
     }
 
     @Test
-    public void testCreateErrorTime() {
+    void testCreateErrorTime() {
         ReservationDto dto = new ReservationDto();
         dto.setCourtNumber(1);
         dto.setDoubles(false);
@@ -143,7 +143,7 @@ public class ReservationServiceTests {
     }
 
     @Test
-    public void testCreateErrorCourt() {
+    void testCreateErrorCourt() {
         ReservationDto dto = new ReservationDto();
         dto.setCourtNumber(1);
         dto.setDoubles(false);
@@ -158,7 +158,7 @@ public class ReservationServiceTests {
     }
 
     @Test
-    public void testCreateErrorOverlap() {
+    void testCreateErrorOverlap() {
         ReservationDto dto = new ReservationDto();
         dto.setCourtNumber(1);
         dto.setDoubles(false);
@@ -183,13 +183,13 @@ public class ReservationServiceTests {
     }
 
     @Test
-    public void testGet() {
+    void testGet() {
         when(reservationDao.findById(1L)).thenReturn(Optional.empty());
         assertThrows(ReservationException.class, () -> reservationService.get(1L));
     }
 
     @Test
-    public void testGetAll() {
+    void testGetAll() {
         SurfaceType surfaceType = new SurfaceType();
         surfaceType.setPricePerMinute(BigDecimal.valueOf(1));
         surfaceType.setName("grass");
@@ -225,7 +225,7 @@ public class ReservationServiceTests {
     }
 
     @Test
-    public void testGetByCourtNumber() {
+    void testGetByCourtNumber() {
         SurfaceType surfaceType = new SurfaceType();
         surfaceType.setPricePerMinute(BigDecimal.valueOf(1));
         surfaceType.setName("grass");
@@ -261,7 +261,7 @@ public class ReservationServiceTests {
     }
 
     @Test
-    public void testGetByPhoneNumber() {
+    void testGetByPhoneNumber() {
         SurfaceType surfaceType = new SurfaceType();
         surfaceType.setPricePerMinute(BigDecimal.valueOf(1));
         surfaceType.setName("grass");
@@ -297,7 +297,7 @@ public class ReservationServiceTests {
     }
 
     @Test
-    public void testUpdate() {
+    void testUpdate() {
 
         ReservationDto dto = new ReservationDto();
         dto.setCourtNumber(1);
@@ -326,7 +326,7 @@ public class ReservationServiceTests {
         reservation.setCustomer(customer);
         reservation.setStartTime(LocalDateTime.now().plusHours(1));
         reservation.setEndTime(LocalDateTime.now().plusHours(2));
-        reservation.setDoubles(false);
+        reservation.setDoubles(true);
         reservation.setPrice(BigDecimal.valueOf(60));
 
         when(reservationDao.findById(1L)).thenReturn(Optional.of(reservation));
@@ -340,7 +340,7 @@ public class ReservationServiceTests {
     }
 
     @Test
-    public void testDelete() {
+    void testDelete() {
         when(reservationDao.findById(any(Long.class))).thenReturn(Optional.empty());
         assertThrows(ReservationException.class, () -> reservationService.delete(1L));
     }
